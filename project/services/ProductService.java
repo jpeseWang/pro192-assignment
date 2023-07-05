@@ -263,7 +263,7 @@ public class ProductService extends Menu {
             System.out.println("Invalid Price. Price must be a positive value.");
             return;
         }
-        List<Product> products = getProductsByPrice(price); // Rename the method to getProductsByPrice
+        List<Product> products = getProductsByPrice(price); 
         displaySearchResults(products);
     }
 
