@@ -2,6 +2,7 @@ package project.services;
 
 public class EmployeeManagement {
     static ArrayList<Employee> EmpArrList = new ArrayList<Employee>();
+    static Validation valid = new Validation();
 
  public static ArrayList<Employee> getListEmployee()
     {
@@ -11,7 +12,7 @@ public class EmployeeManagement {
  public static void displayEmployee(ArrayList<Employee> ListEmployee)
     {    
         if (ListEmployee.isEmpty()){
-            System.out.println("No customer found!");
+            System.out.println("No Employee found!");
         } else {  
             for (Employee i : ListEmployee){
                 System.out.println(i);
@@ -173,7 +174,7 @@ public static ArrayList<Employee> search(ArrayList<Employee> ListEmployee, Predi
  
  /////////////////////////////////////////////////////////////////////////////
  private void displayMenu() {
-        System.out.println("----- Customer Management System -----");
+        System.out.println("----- Employee Management System -----");
         System.out.println("1. Display all Employee");
         System.out.println("2. Add new Employee");
         System.out.println("3. Search Employee");
