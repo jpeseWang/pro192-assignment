@@ -1,6 +1,9 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +18,7 @@ public class OrderService {
     
     public OrderService() {
         this.orders = new ArrayList<>();
+        readDataFromFile();
     }
 
     public void execute() {
@@ -103,7 +107,7 @@ public class OrderService {
         System.out.print("\t\t\tEnter customer name: ");
         String customerName = sc.nextLine();
         if (!DataValidator.isValidName(customerName)) {
-            System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
             return;
         }
         System.out.print("\t\t\tEnter status: ");
@@ -164,7 +168,7 @@ public class OrderService {
         }
     }
 
-    public void writeDataToFile() {
+    private void writeDataToFile() {
         try {
             FileWriter fw = new FileWriter("resources/data/orders.txt");
             BufferedWriter bw = new BufferedWriter(fw);
@@ -180,6 +184,29 @@ public class OrderService {
             System.out.println("\t\t\t**Product data saved to file successfully!.**");
         } catch (IOException e) {
             System.out.println("\t\t\tError writing data to file.");
+            e.printStackTrace();
+        }
+    }
+    private void readDataFromFile() {
+        try {
+            FileInputStream fis = new FileInputStream("resources/data/orders.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line = br.readLine();
+            while (line != null) {
+                String arr[] = line.split(",");
+                if (arr.length == 3) {
+                    Order order = new Order(arr[0], arr[1], arr[2]);
+                    orders.add(order);
+                }
+                line = br.readLine();
+            }
+            br.close();
+            isr.close();
+            fis.close();
+
+            System.out.println("\t\t\tData loaded from file successfully.");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

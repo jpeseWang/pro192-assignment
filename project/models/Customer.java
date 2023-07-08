@@ -15,6 +15,9 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public Customer(String string, String string2, double parseDouble) {
+    }
+
     public String getCustomerID() {
         return customerID;
     }

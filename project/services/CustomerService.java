@@ -1,9 +1,10 @@
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -11,7 +12,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import project.models.Customer;
-import project.models.Product;
+import project.utils.DataValidator;
 
 public class CustomerService extends Menu {
 
@@ -20,7 +21,7 @@ public class CustomerService extends Menu {
 
     public CustomerService() {
         customerList = new ArrayList<>();
-        //customer.loadDataFromFile();
+        readDataFromFile(); 
     }
 
     public void execute() {
@@ -62,7 +63,6 @@ public class CustomerService extends Menu {
         } while (choice != 0);
     }
 
-    // Display menu
     private void displayMenu() {
         System.out.println("\t\t\t+---------------------------------------+");
         System.out.println("\t\t\t|     Customer Management System        |");
@@ -76,17 +76,23 @@ public class CustomerService extends Menu {
         System.out.println("\t\t\t| 7. Sort customer                      |");
         System.out.println("\t\t\t| 0. Exit                               |");
         System.out.println("\t\t\t+---------------------------------------+");
-        System.out.print("Enter your choice: ");
+        System.out.print("\t\t\tEnter your choice: ");
     }
 
     // Display customers
     private void displayAllCustomers() {
-        System.out.println("\t\t\t----- All Customers -----");
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t|----------           All Customers           ------------|");
         if (!customerList.isEmpty()) {
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t|  ID  |      Name     |   Phone Number   | Date of Birth |");
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
             for (Customer customer : customerList) {
-                System.out.println(customer);
-                System.out.println("\t\t\t--------------------------");
+                System.out.printf("\t\t\t| %-4s |  %-12s |   %-14s |  %-12s |\n",
+                    customer.getCustomerID(), customer.getName(), customer.getPhone(), customer.getDateOfBirth());
             }
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+             System.out.println("");
         } else {
             System.out.println("\t\t\tNo customers found.");
         }
@@ -95,23 +101,25 @@ public class CustomerService extends Menu {
     // Add customers
     private void addCustomer() {
         System.out.println("\t\t\t----- Add New Customer -----");
-        System.out.print("Enter Customer ID: ");
+        System.out.println("\t\t\t1. Customer ID must have a length of 4 and start with 'KH'.");
+        System.out.print("\t\t\tEnter Customer ID: "); 
         String customerID = scanner.nextLine();
-        if (!isValidCustomerID(customerID)) {
+        if (!DataValidator.isValidCustomerID(customerID)) {
             System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             return;
         }
-        System.out.print("Enter Name: ");
+        System.out.print("\t\t\t2. Enter Name: ");
         String name = scanner.nextLine();
-        if (!isValidName(name)) {
-            System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
+        if (!DataValidator.isValidName(name)) {
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
             return;
         }
-        System.out.print("Enter Phone: ");
+        System.out.println("\t\t\t3. Phone must have a length of 10 and start with '09'");
+        System.out.print("\t\t\tEnter Phone: "); 
         String phone;
         try {
             phone = scanner.nextLine();
-            if (!isValidPhone(phone)) {
+            if (!DataValidator.isValidPhone(phone)) {
                 System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
                 return;
             }
@@ -120,9 +128,9 @@ public class CustomerService extends Menu {
             
             return;
         }
-        System.out.print("Enter Date of Birth (dd/mm/yyyy): ");
+        System.out.print("\t\t\tEnter Date of Birth (dd/mm/yyyy): ");
         String dateOfBirth = scanner.nextLine();    
-        if (!isValidDateOfBirth(dateOfBirth)) {
+        if (!DataValidator.isValidDateOfBirth(dateOfBirth)) {
             System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
             return;
         }
@@ -140,7 +148,7 @@ public class CustomerService extends Menu {
         System.out.println("\t\t\t2. Name");
         System.out.println("\t\t\t3. Phone");
         System.out.println("\t\t\t4. Date of birth");
-        System.out.print("Enter your choice: ");
+        System.out.print("\t\t\tEnter your choice: ");
         int searchChoice = scanner.nextInt();
         scanner.nextLine();
 
@@ -164,9 +172,9 @@ public class CustomerService extends Menu {
     }
 
     private void searchCustomerByID() {
-        System.out.print("Enter Customer ID: ");
+        System.out.print("\t\t\tEnter Customer ID: ");
         String customerID = scanner.nextLine();
-        if (!isValidCustomerID(customerID)) {
+        if (!DataValidator.isValidCustomerID(customerID)) {
             System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             return;
         }
@@ -190,10 +198,10 @@ public class CustomerService extends Menu {
     }
 
     private void searchCustomersByName() {
-        System.out.print("Enter Name: ");
+        System.out.print("\t\t\tEnter Name: ");
         String name = scanner.nextLine();
-        if (!isValidName(name)) {
-            System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
+        if (!DataValidator.isValidName(name)) {
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
             return;
         }
         List<Customer> customers = getCustomersByName(name);
@@ -211,7 +219,7 @@ public class CustomerService extends Menu {
     }
 
     private void searchCustomersByPhone() {
-        System.out.print("Enter Phone: ");
+        System.out.print("\t\t\tEnter Phone: ");
         String phone;
         try {
             phone = scanner.nextLine();
@@ -221,7 +229,7 @@ public class CustomerService extends Menu {
             scanner.nextLine();
             return;
         }
-        if (!isValidPhone(phone)) {
+        if (!DataValidator.isValidPhone(phone)) {
             System.out.println("\t\t\tInvalid Phone. Phone must be a positive value.");
             return;
         }
@@ -233,16 +241,16 @@ public class CustomerService extends Menu {
         List<Customer> Customers = new ArrayList<>();
         for (Customer customer : customerList) {
             if (customer.getPhone() == phone) {
-                customers.add(customer);
+                Customers.add(customer);
             }
         }
-        return customers;
+        return Customers;
     }
 
     private void searchCustomersByDateOfBirth() {
-        System.out.print("Enter Date of Birth (dd/mm/yyyy): ");
+        System.out.print("\t\t\tEnter Date of Birth (dd/mm/yyyy): ");
         String dateOfBirth = scanner.nextLine();
-        if (!isValidDateOfBirth(dateOfBirth)) {
+        if (!DataValidator.isValidDateOfBirth(dateOfBirth)) {
             System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
             return;
         }
@@ -254,10 +262,10 @@ public class CustomerService extends Menu {
         List<Customer> Customers = new ArrayList<>();
         for (Customer customer : customerList) {
             if (customer.getDateOfBirth() == dateOfBirth) {
-                customers.add(customer);
+                Customers.add(customer);
             }
         }
-        return customers;
+        return Customers;
     }
 
     private void displaySearchResults(List<Customer> customers) {
@@ -277,7 +285,7 @@ public class CustomerService extends Menu {
         System.out.println("\t\t\tSort by:");
         System.out.println("\t\t\t1. Customer ID");
         System.out.println("\t\t\t2. Name");
-        System.out.print("Enter your choice: ");
+        System.out.print("\t\t\tEnter your choice: ");
         int sortChoice = scanner.nextInt();
         scanner.nextLine();
 
@@ -318,9 +326,9 @@ public class CustomerService extends Menu {
 
     // Delete customers
     private void deleteCustomer() {
-        System.out.print("Enter Customer ID: ");
+        System.out.print("\t\t\tEnter Customer ID: ");
             String customerID = scanner.nextLine();
-            if (!isValidCustomerID(customerID)) {
+            if (!DataValidator.isValidCustomerID(customerID)) {
             System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             return;
         }
@@ -336,7 +344,7 @@ public class CustomerService extends Menu {
     // Write data to file
     public void writeDataToFile() {
         try {
-            FileWriter fw = new FileWriter("customers.txt");
+            FileWriter fw = new FileWriter("resources/data/customers.txt");
             BufferedWriter bw = new BufferedWriter(fw);
 
             for (Customer customer : customerList) {
@@ -354,49 +362,52 @@ public class CustomerService extends Menu {
             e.printStackTrace();
         }
     }
-    // //Load data from file
-    // public void loadDataFromFile() {
-    //     try {
-    //         FileReader fr = new FileReader("customers.txt");
-    //         BufferedReader br = new BufferedReader(fr);
 
-    //         String line;
-    //         while ((line = br.readLine()) != null) {
-    //             String[] data = line.split(", ");
-    //             if (data.length == 4) {
-    //                 Customer customer = new Customer(data[0], data[1], data[2], data[3]);
-    //                 customers.add(customer);
-    //             }
-    //         }
+    public void readDataFromFile() {
+        try {
+            FileInputStream fis = new FileInputStream("resources/data/customers.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line = br.readLine();
+            while (line != null) {
+                String arr[] = line.split(",");
+                if (arr.length == 4) {
+                    Customer customer = new Customer(arr[0], arr[1], arr[2], arr[3]);
+                    customerList.add(customer);
+                }
+                line = br.readLine();
+            }   
+            br.close();
+            isr.close();
+            fis.close();
 
-    //         br.close();
-    //     } catch (IOException e) {
-    //         System.out.println("\t\t\tError loading data from file.");
-    //         e.printStackTrace();
-    //     }
-    // }
+            System.out.println("\t\t\tData loaded from file successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     // Update information
     private void updateCustomer() {
-        System.out.print("Enter Customer ID: ");
+        System.out.print("\t\t\tEnter Customer ID: ");
         String customerID = scanner.nextLine();
         Customer customer = getCustomerByID(customerID);
         if (customer != null) {
-            System.out.print("Enter new Name: ");
+            System.out.print("\t\t\tEnter new Name: ");
                 String newName = scanner.nextLine();
-                if (!isValidName(newName)) {
-                    System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
+                if (!DataValidator.isValidName(newName)) {
+                    System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
                     return;
                 }
-            System.out.print("Enter new Phone number: ");
+            System.out.print("\t\t\tEnter new Phone number: ");
                 String newPhone = scanner.nextLine();
-                if (!isValidPhone(newPhone)) {
+                if (!DataValidator.isValidPhone(newPhone)) {
                     System.out.println("\t\t\tInvalid Phone. Phone must have a length of 4 and start with '09'.");
                     return;
                 }
-            System.out.print("Enter new Date of Birth (dd/mm/yyyy): ");
+            System.out.print("\t\t\tEnter new Date of Birth (dd/mm/yyyy): ");
                 String newDateOfBirth = scanner.nextLine();
-                if (!isValidDateOfBirth(newDateOfBirth)) {
+                if (!DataValidator.isValidDateOfBirth(newDateOfBirth)) {
                     System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
                     return;
                 }
@@ -410,20 +421,6 @@ public class CustomerService extends Menu {
     }
     
     //Check valid
-    private boolean isValidCustomerID(String customerID) {
-        return customerID.matches("^KH\\d{2}$");
-    }
-
-    private boolean isValidName(String name) {
-        return name.matches("[a-zA-Z]+");
-    }
-
-    private boolean isValidPhone(String phone) {
-        return phone.matches("^09\\d{8}$");
-    }
-
-    private boolean isValidDateOfBirth(String dateOfBirth) {
-        return dateOfBirth.matches("^\\d{2}/\\d{2}/\\d{4}$");
-    }
+    
 
 }

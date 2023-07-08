@@ -10,18 +10,17 @@ import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import javafx.scene.control.Menu;
-
 import project.models.Product;
+import project.utils.DataValidator;
 
 public class ProductService extends Menu {
 
     private Scanner scanner = new Scanner(System.in);
-
     private List<Product> productList;
 
     public ProductService() {
         productList = new ArrayList<>();
+        readDataFromFile();
     }
 
     public void execute() {
@@ -54,17 +53,16 @@ public class ProductService extends Menu {
                     writeDataToFile();
                     break;
                 case 0:
-                    System.out.println("Exiting...");
+                    System.out.println("\t\t\tExiting...");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\t\t\tInvalid choice. Please try again.");
                     break;
             }
         } while (choice != 0);
     }
 
     private void displayMenu() {
-        readDataFromFile();
         System.out.println("\t\t\t+---------------------------------------------------+");
         System.out.println("\t\t\t|             Product Management System             |");
         System.out.println("\t\t\t+---------------------------------------------------+");
@@ -77,120 +75,120 @@ public class ProductService extends Menu {
         System.out.println("\t\t\t| 7. Write Data to file                             |");
         System.out.println("\t\t\t| 0. Exit                                           |");
         System.out.println("\t\t\t+---------------------------------------------------+");
-        System.out.print("Enter your choice: ");
+        System.out.print("\t\t\tEnter your choice: ");
     }
 
     private void displayAllProducts() {
-        System.out.println("\t\t\t+-------------+-------------------+------------------+");
-        System.out.println("\t\t\t|------------      All Products      ----------      |");
-        System.out.println("\t\t\t+-------------+-------------------+------------------+");
-        System.out.println("\t\t\t|  ID         |        Name       |  Price           |");
-        System.out.println("\t\t\t+-------------+-------------------+------------------+");
+        System.out.println("\t\t\t+------+-------------------+------------------+");
+        System.out.println("\t\t\t|   ---------     All Products      --------  |");
+        System.out.println("\t\t\t+------+-------------------+------------------+");
+        System.out.println("\t\t\t|  ID  |        Name       |       Price      |");
+        System.out.println("\t\t\t+------+-------------------+------------------+");
         for (Product product : productList) {
-            System.out.printf("\t\t\t| %-11s | %-17s | $%10.2f      |\n",
+            System.out.printf("\t\t\t| %-4s |  %-16s |  $%9.2f      |\n",
                     product.getProductID(), product.getName(), product.getPrice());
         }
-        System.out.println("\t\t\t+-------------+-------------------+------------------+");
-        System.out.println("");
+        System.out.println("\t\t\t+------+-------------------+------------------+");
+        System.out.println("\t\t\t");
     }
 
     private void addProduct() {
-        System.out.println("----- Add New Product -----");
+        System.out.println("\t\t\t----- Add New Product -----");
         String productID;
         String name;
         double price;
         while (true) {
-            System.out.print("Enter Product ID: ");
+            System.out.print("\t\t\tEnter Product ID: ");
             productID = scanner.nextLine();
-            if (isValidProductID(productID)) {
+            if (DataValidator.isValidProductID(productID)) {
                 break;
             }
-            System.out.println("Invalid Product ID. Product ID must have a length of 4, start with 'SP', and contain only numbers.");
+            System.out.println("\t\t\tInvalid Product ID. Product ID must have a length of 4, start with 'SP', and contain only numbers.");
         }
         while (true) {
-            System.out.print("Enter Name: ");
+            System.out.print("\t\t\tEnter Name: ");
             name = scanner.nextLine();
-            if (isValidName(name)) {
+            if (DataValidator.isValidName(name)) {
                 break;
             }
-            System.out.println("Invalid Name. Name must not contain numbers or spaces.");
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
         }
         while (true) {
-            System.out.print("Enter Price: ");
+            System.out.print("\t\t\tEnter Price: ");
             try {
                 price = Double.parseDouble(scanner.nextLine());
-                if (isValidPrice(price)) {
+                if (DataValidator.isValidPrice(price)) {
                     break;
                 }
-                System.out.println("Invalid Price. Price must be a valid number.");
+                System.out.println("\t\t\tInvalid Price. Price must be a valid number.");
             } catch (NumberFormatException e) {
-                System.out.println("Invalid Price. Price must be a valid number.");
+                System.out.println("\t\t\tInvalid Price. Price must be a valid number.");
             }
         }
 
         Product product = new Product(productID, name, price);
         productList.add(product);
-        System.out.println("Product added.");
+        System.out.println("\t\t\tProduct added.");
     }
 
     private void updateProduct() {
-        System.out.print("Enter Product ID: ");
+        System.out.print("\t\t\tEnter Product ID: ");
         String productID = scanner.nextLine();
         Product product = getProductByID(productID);
         if (product != null) {
-            System.out.print("Enter new Name: ");
+            System.out.print("\t\t\tEnter new Name: ");
             String newName = scanner.nextLine();
-            if (!isValidName(newName)) {
-                System.out.println("Invalid Name. Name must not contain numbers or spaces.");
+            if (!DataValidator.isValidName(newName)) {
+                System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
                 return;
             }
 
-            System.out.print("Enter new Price: ");
+            System.out.print("\t\t\tEnter new Price: ");
             double newPrice;
             try {
                 newPrice = Double.parseDouble(scanner.nextLine());
-                if (!isValidPrice(newPrice)) {
-                    System.out.println("Invalid Price. Price must be a positive number.");
+                if (!DataValidator.isValidPrice(newPrice)) {
+                    System.out.println("\t\t\tInvalid Price. Price must be a positive number.");
                     return;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid Price. Price must be a valid number.");
+                System.out.println("\t\t\tInvalid Price. Price must be a valid number.");
                 return;
             }
 
             product.setName(newName);
             product.setPrice(newPrice);
-            System.out.println("Product updated.");
+            System.out.println("\t\t\tProduct updated.");
         } else {
-            System.out.println("No product found.");
+            System.out.println("\t\t\tNo product found.");
         }
     }
 
     private void deleteProduct() {
-        System.out.print("Enter Product ID: ");
+        System.out.print("\t\t\tEnter Product ID: ");
         String productID = scanner.nextLine();
 
-        if (!isValidProductID(productID)) {
-            System.out.println("Invalid Product ID. Product ID must have a length of 4 and start with 'SP'.");
+        if (!DataValidator.isValidProductID(productID)) {
+            System.out.println("\t\t\tInvalid Product ID. Product ID must have a length of 4 and start with 'SP'.");
             return;
         }
 
         Product product = getProductByID(productID);
         if (product != null) {
             productList.remove(product);
-            System.out.println("Product deleted.");
+            System.out.println("\t\t\tProduct deleted.");
         } else {
-            System.out.println("No product found.");
+            System.out.println("\t\t\tNo product found.");
         }
     }
 
     private void searchProducts() {
-        System.out.println("----- Search Product -----");
-        System.out.println("Search by:");
-        System.out.println("1. Product ID");
-        System.out.println("2. Name");
-        System.out.println("3. Price");
-        System.out.print("Enter your choice: ");
+        System.out.println("\t\t\t----- Search Product -----");
+        System.out.println("\t\t\tSearch by:");
+        System.out.println("\t\t\t1. Product ID");
+        System.out.println("\t\t\t2. Name");
+        System.out.println("\t\t\t3. Price");
+        System.out.print("\t\t\tEnter your choice: ");
         int searchChoice = scanner.nextInt();
         scanner.nextLine();
 
@@ -205,25 +203,25 @@ public class ProductService extends Menu {
                 searchProductsByPrice();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("\t\t\tInvalid choice. Please try again.");
                 break;
         }
     }
 
     private void searchProductByID() {
-        System.out.print("Enter Product ID: ");
+        System.out.print("\t\t\tEnter Product ID: ");
         String productID = scanner.nextLine();
-        if (!isValidProductID(productID)) {
-            System.out.println("Invalid Product ID. Product ID must have a length of 4 and start with 'SP'.");
+        if (!DataValidator.isValidProductID(productID)) {
+            System.out.println("\t\t\tInvalid Product ID. Product ID must have a length of 4 and start with 'SP'.");
             return;
         }
         Product product = getProductByID(productID);
         if (product != null) {
-            System.out.println("----- Product Found -----");
+            System.out.println("\t\t\t----- Product Found -----");
             System.out.println(product);
-            System.out.println("--------------------------");
+            System.out.println("\t\t\t--------------------------");
         } else {
-            System.out.println("No product found.");
+            System.out.println("\t\t\tNo product found.");
         }
     }
 
@@ -237,10 +235,10 @@ public class ProductService extends Menu {
     }
 
     private void searchProductsByName() {
-        System.out.print("Enter Name: ");
+        System.out.print("\t\t\tEnter Name: ");
         String name = scanner.nextLine();
-        if (!isValidName(name)) {
-            System.out.println("Invalid Name. Name cannot contain numbers and must not be blank.");
+        if (!DataValidator.isValidName(name)) {
+            System.out.println("\t\t\tInvalid Name. Name cannot contain numbers and must not be blank.");
             return;
         }
         List<Product> products = getProductsByName(name); // Rename the method to getProductsByName
@@ -258,18 +256,18 @@ public class ProductService extends Menu {
     }
 
     private void searchProductsByPrice() {
-        System.out.print("Enter Price: ");
+        System.out.print("\t\t\tEnter Price: ");
         double price;
         try {
             price = scanner.nextDouble();
             scanner.nextLine();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid Price. Price must be a numeric value.");
+            System.out.println("\t\t\tInvalid Price. Price must be a numeric value.");
             scanner.nextLine();
             return;
         }
-        if (!isValidPrice(price)) {
-            System.out.println("Invalid Price. Price must be a positive value.");
+        if (!DataValidator.isValidPrice(price)) {
+            System.out.println("\t\t\tInvalid Price. Price must be a positive value.");
             return;
         }
         List<Product> products = getProductsByPrice(price); // Rename the method to getProductsByPrice
@@ -287,24 +285,24 @@ public class ProductService extends Menu {
     }
 
     private void displaySearchResults(List<Product> products) {
-        System.out.println("----- Search Results -----");
+        System.out.println("\t\t\t----- Search Results -----");
         if (!products.isEmpty()) {
             for (Product product : products) {
                 System.out.println(product);
-                System.out.println("--------------------------");
+                System.out.println("\t\t\t--------------------------");
             }
         } else {
-            System.out.println("No products found.");
+            System.out.println("\t\t\tNo products found.");
         }
     }
 
     private void sortProducts() {
-        System.out.println("----- Sort Products -----");
-        System.out.println("Sort by:");
-        System.out.println("1. Product ID");
-        System.out.println("2. Name");
-        System.out.println("3. Price");
-        System.out.print("Enter your choice: ");
+        System.out.println("\t\t\t----- Sort Products -----");
+        System.out.println("\t\t\tSort by:");
+        System.out.println("\t\t\t1. Product ID");
+        System.out.println("\t\t\t2. Name");
+        System.out.println("\t\t\t3. Price");
+        System.out.print("\t\t\tEnter your choice: ");
         int sortChoice = scanner.nextInt();
         scanner.nextLine();
 
@@ -319,7 +317,7 @@ public class ProductService extends Menu {
                 sortProductsByPrice();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("\t\t\tInvalid choice. Please try again.");
                 break;
         }
     }
@@ -331,7 +329,7 @@ public class ProductService extends Menu {
                 return p1.getProductID().compareTo(p2.getProductID());
             }
         });
-        System.out.println("Products sorted by ID:");
+        System.out.println("\t\t\tProducts sorted by ID:");
         displayAllProducts();
     }
 
@@ -342,7 +340,7 @@ public class ProductService extends Menu {
                 return p1.getName().compareToIgnoreCase(p2.getName());
             }
         });
-        System.out.println("Products sorted by Name:");
+        System.out.println("\t\t\tProducts sorted by Name:");
         displayAllProducts();
     }
 
@@ -353,11 +351,11 @@ public class ProductService extends Menu {
                 return Double.compare(p1.getPrice(), p2.getPrice());
             }
         });
-        System.out.println("Products sorted by Price:");
+        System.out.println("\t\t\tProducts sorted by Price:");
         displayAllProducts();
     }
 
-    public void writeDataToFile() {
+    private void writeDataToFile() {
         try {
             FileWriter fw = new FileWriter("resources/data/products.txt");
             BufferedWriter bw = new BufferedWriter(fw);
@@ -370,14 +368,14 @@ public class ProductService extends Menu {
             }
 
             bw.close();
-            System.out.println("Product data saved to file.");
+            System.out.println("\t\t\tProduct data saved to file.");
         } catch (IOException e) {
-            System.out.println("Error writing data to file.");
+            System.out.println("\t\t\tError writing data to file.");
             e.printStackTrace();
         }
     }
 
-    public void readDataFromFile() {
+    private void readDataFromFile() {
         try {
             FileInputStream fis = new FileInputStream("resources/data/products.txt");
             InputStreamReader isr = new InputStreamReader(fis);
@@ -395,21 +393,9 @@ public class ProductService extends Menu {
             isr.close();
             fis.close();
 
-            System.out.println("Data loaded from file successfully.");
+            System.out.println("\t\t\tData loaded from file successfully.");
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private boolean isValidProductID(String productID) {
-        return productID.matches("^SP\\d{2}$");
-    }
-
-    private boolean isValidName(String name) {
-        return name.matches("[a-zA-Z ]+");
-    }
-
-    private boolean isValidPrice(double price) {
-        return price >= 0;
     }
 }

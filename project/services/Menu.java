@@ -6,7 +6,7 @@ public class Menu {
     int choice;
         do {
             System.out.println("\t\t\t+---------------------------------------+");
-            System.out.println("\t\t\t| Order and Delivery Management System  |");
+            System.out.println("\t\t\t| ORDER AND DELIVERY MANAGEMENT SYSTEM  |");
             System.out.println("\t\t\t+---------------------------------------+");
             System.out.println("\t\t\t| 1. Manage Orders                      |");
             System.out.println("\t\t\t| 2. Manage Products                    |");
