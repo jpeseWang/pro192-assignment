@@ -53,10 +53,10 @@ public class CustomerService extends Menu {
                     sortCustomers();
                     break;
                 case 0:
-                    System.out.println("Exiting...");
+                    System.out.println("\t\t\tExiting...");
                     break;
                 default:
-                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("\t\t\tInvalid choice. Please try again.");
                     break;
             }
         } while (choice != 0);
@@ -64,44 +64,44 @@ public class CustomerService extends Menu {
 
     // Display menu
     private void displayMenu() {
-        System.out.println("----- Customer Management System -----");
-        System.out.println("1. Add new customer");
-        System.out.println("2. Display all customers");
-        System.out.println("3. Write data to file");
-        System.out.println("4. Search customer");
-        System.out.println("5. Delete a customer");
-        System.out.println("6. Update phone and date of birth");
-        System.out.println("7. Sort customer list by different criteria");
-        System.out.println("0. Exit");
+        System.out.println("\t\t\t----- Customer Management System -----");
+        System.out.println("\t\t\t1. Add new customer");
+        System.out.println("\t\t\t2. Display all customers");
+        System.out.println("\t\t\t3. Write data to file");
+        System.out.println("\t\t\t4. Search customer");
+        System.out.println("\t\t\t5. Delete a customer");
+        System.out.println("\t\t\t6. Update phone and date of birth");
+        System.out.println("\t\t\t7. Sort customer list by different criteria");
+        System.out.println("\t\t\t0. Exit");
         System.out.print("Enter your choice: ");
     }
 
     // Display customers
     private void displayAllCustomers() {
-        System.out.println("----- All Customers -----");
+        System.out.println("\t\t\t----- All Customers -----");
         if (!customerList.isEmpty()) {
             for (Customer customer : customerList) {
                 System.out.println(customer);
-                System.out.println("--------------------------");
+                System.out.println("\t\t\t--------------------------");
             }
         } else {
-            System.out.println("No customers found.");
+            System.out.println("\t\t\tNo customers found.");
         }
     }
 
     // Add customers
     private void addCustomer() {
-        System.out.println("----- Add New Customer -----");
+        System.out.println("\t\t\t----- Add New Customer -----");
         System.out.print("Enter Customer ID: ");
         String customerID = scanner.nextLine();
         if (!isValidCustomerID(customerID)) {
-            System.out.println("Invalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
+            System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             return;
         }
         System.out.print("Enter Name: ");
         String name = scanner.nextLine();
         if (!isValidName(name)) {
-            System.out.println("Invalid Name. Name must not contain numbers or spaces.");
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
             return;
         }
         System.out.print("Enter Phone: ");
@@ -109,34 +109,34 @@ public class CustomerService extends Menu {
         try {
             phone = scanner.nextLine();
             if (!isValidPhone(phone)) {
-                System.out.println("Invalid Phone. Phone must be a valid number.");
+                System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
                 return;
             }
         } catch (InputMismatchException e) {
-            System.out.println("Invalid Phone. Phone must be a valid number.");
+            System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
             
             return;
         }
         System.out.print("Enter Date of Birth (dd/mm/yyyy): ");
         String dateOfBirth = scanner.nextLine();    
         if (!isValidDateOfBirth(dateOfBirth)) {
-            System.out.println("Invalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+            System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
             return;
         }
 
         Customer customer = new Customer(customerID, name, phone, dateOfBirth);
         customerList.add(customer);
-        System.out.println("Customer added.");
+        System.out.println("\t\t\tCustomer added.");
     }
 
     // Search customers
     private void searchCustomer() {
-        System.out.println("----- Search Customer -----");
-        System.out.println("Search by:");
-        System.out.println("1. Customer ID");
-        System.out.println("2. Name");
-        System.out.println("3. Phone");
-        System.out.println("4. Date of birth");
+        System.out.println("\t\t\t----- Search Customer -----");
+        System.out.println("\t\t\tSearch by:");
+        System.out.println("\t\t\t1. Customer ID");
+        System.out.println("\t\t\t2. Name");
+        System.out.println("\t\t\t3. Phone");
+        System.out.println("\t\t\t4. Date of birth");
         System.out.print("Enter your choice: ");
         int searchChoice = scanner.nextInt();
         scanner.nextLine();
@@ -155,7 +155,7 @@ public class CustomerService extends Menu {
                 searchCustomersByDateOfBirth();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("\t\t\tInvalid choice. Please try again.");
                 break;
         }
     }
@@ -164,16 +164,16 @@ public class CustomerService extends Menu {
         System.out.print("Enter Customer ID: ");
         String customerID = scanner.nextLine();
         if (!isValidCustomerID(customerID)) {
-            System.out.println("Invalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
+            System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             return;
         }
         Customer customer = getCustomerByID(customerID);
         if (customer != null) {
-            System.out.println("----- Customer Found -----");
+            System.out.println("\t\t\t----- Customer Found -----");
             System.out.println(customer);
-            System.out.println("--------------------------");
+            System.out.println("\t\t\t--------------------------");
         } else {
-            System.out.println("No customer found.");
+            System.out.println("\t\t\tNo customer found.");
         }
     }
 
@@ -190,7 +190,7 @@ public class CustomerService extends Menu {
         System.out.print("Enter Name: ");
         String name = scanner.nextLine();
         if (!isValidName(name)) {
-            System.out.println("Invalid Name. Name must not contain numbers or spaces.");
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
             return;
         }
         List<Customer> customers = getCustomersByName(name);
@@ -214,12 +214,12 @@ public class CustomerService extends Menu {
             phone = scanner.nextLine();
             scanner.nextLine();
         } catch (InputMismatchException e) {
-            System.out.println("Invalid Phone. Phone must be a numeric value.");
+            System.out.println("\t\t\tInvalid Phone. Phone must be a numeric value.");
             scanner.nextLine();
             return;
         }
         if (!isValidPhone(phone)) {
-            System.out.println("Invalid Phone. Phone must be a positive value.");
+            System.out.println("\t\t\tInvalid Phone. Phone must be a positive value.");
             return;
         }
         List<Customer> customers = getCustomersByPhone(phone);
@@ -240,7 +240,7 @@ public class CustomerService extends Menu {
         System.out.print("Enter Date of Birth (dd/mm/yyyy): ");
         String dateOfBirth = scanner.nextLine();
         if (!isValidDateOfBirth(dateOfBirth)) {
-            System.out.println("Invalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+            System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
             return;
         }
         List<Customer> customers = getCustomersByDateOfBirth(dateOfBirth);
@@ -258,22 +258,22 @@ public class CustomerService extends Menu {
     }
 
     private void displaySearchResults(List<Customer> customers) {
-        System.out.println("----- Search Results -----");
+        System.out.println("\t\t\t----- Search Results -----");
         if (!customers.isEmpty()) {
             for (Customer customer : customers) {
                 System.out.println(customer);
-                System.out.println("--------------------------");
+                System.out.println("\t\t\t--------------------------");
             }
         } else {
-            System.out.println("No customers found.");
+            System.out.println("\t\t\tNo customers found.");
         }
     }
 
     private void sortCustomers() {
-        System.out.println("----- Sort Customers -----");
-        System.out.println("Sort by:");
-        System.out.println("1. Customer ID");
-        System.out.println("2. Name");
+        System.out.println("\t\t\t----- Sort Customers -----");
+        System.out.println("\t\t\tSort by:");
+        System.out.println("\t\t\t1. Customer ID");
+        System.out.println("\t\t\t2. Name");
         System.out.print("Enter your choice: ");
         int sortChoice = scanner.nextInt();
         scanner.nextLine();
@@ -286,7 +286,7 @@ public class CustomerService extends Menu {
                 sortCustomersByName();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println("\t\t\tInvalid choice. Please try again.");
                 break;
         }
     }
@@ -298,7 +298,7 @@ public class CustomerService extends Menu {
                 return c1.getCustomerID().compareTo(c2.getCustomerID());
             }
         });
-        System.out.println("Customers sorted by ID:");
+        System.out.println("\t\t\tCustomers sorted by ID:");
         displayAllCustomers();
     }
 
@@ -309,7 +309,7 @@ public class CustomerService extends Menu {
                 return c1.getName().compareToIgnoreCase(c2.getName());
             }
         });
-        System.out.println("Customers sorted by Name:");
+        System.out.println("\t\t\tCustomers sorted by Name:");
         displayAllCustomers();
     }
 
@@ -318,15 +318,15 @@ public class CustomerService extends Menu {
         System.out.print("Enter Customer ID: ");
             String customerID = scanner.nextLine();
             if (!isValidCustomerID(customerID)) {
-            System.out.println("Invalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
+            System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             return;
         }
         Customer customer = getCustomerByID(customerID);
         if (customer != null) {
             customerList.remove(customer);
-            System.out.println("Customer deleted.");
+            System.out.println("\t\t\tCustomer deleted.");
         } else {
-            System.out.println("No customer found.");
+            System.out.println("\t\t\tNo customer found.");
         }
     }
 
@@ -345,9 +345,9 @@ public class CustomerService extends Menu {
             }
 
             bw.close();
-            System.out.println("Customer data saved to file.");
+            System.out.println("\t\t\tCustomer data saved to file.");
         } catch (IOException e) {
-            System.out.println("Error writing data to file.");
+            System.out.println("\t\t\tError writing data to file.");
             e.printStackTrace();
         }
     }
@@ -368,7 +368,7 @@ public class CustomerService extends Menu {
 
     //         br.close();
     //     } catch (IOException e) {
-    //         System.out.println("Error loading data from file.");
+    //         System.out.println("\t\t\tError loading data from file.");
     //         e.printStackTrace();
     //     }
     // }
@@ -382,31 +382,31 @@ public class CustomerService extends Menu {
             System.out.print("Enter new Name: ");
                 String newName = scanner.nextLine();
                 if (!isValidName(newName)) {
-                    System.out.println("Invalid Name. Name must not contain numbers or spaces.");
+                    System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
                     return;
                 }
             System.out.print("Enter new Phone number: ");
             try {
                 String newPhone = scanner.nextLine();
                 if (!isValidPhone(newPhone)) {
-                    System.out.println("Invalid Phone. Phone must have a length of 4 and start with '09'.");
+                    System.out.println("\t\t\tInvalid Phone. Phone must have a length of 4 and start with '09'.");
                     return;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Invalid Phone. Phone must be a valid number.");
+                System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
                 return;
             }
             System.out.print("Enter new Date of Birth (dd/mm/yyyy): ");
                 String newDateOfBirth = scanner.nextLine();
                 if (!isValidDateOfBirth(newDateOfBirth)) {
-                    System.out.println("Invalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+                    System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
                     return;
             }
             customer.setPhone(newPhone);
             customer.setDateOfBirth(newDateOfBirth);
-            System.out.println("Customer updated.");
+            System.out.println("\t\t\tCustomer updated.");
         } else {
-            System.out.println("No customer found.");
+            System.out.println("\t\t\tNo customer found.");
         }
     }
     

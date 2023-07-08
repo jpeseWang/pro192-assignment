@@ -19,7 +19,7 @@ public class EmployeeService {
  public static void displayEmployee(ArrayList<Employee> ListEmployee)
     {    
         if (ListEmployee.isEmpty()){
-            System.out.println("No Employee found!");
+            System.out.println("\t\t\tNo Employee found!");
         } else {  
             for (Employee i : ListEmployee){
                 System.out.println(i);
@@ -161,10 +161,10 @@ public static ArrayList<Employee> search(ArrayList<Employee> ListEmployee, Predi
                     SortEmployee();
                     break;
                 case 7:
-                    System.out.println("Exit");
+                    System.out.println("\t\t\tExit");
                     break;
                 default:
-                    System.out.println("Invalid option! (1-7)");
+                    System.out.println("\t\t\tInvalid option! (1-7)");
                     break;
 
             }
@@ -181,14 +181,14 @@ public static ArrayList<Employee> search(ArrayList<Employee> ListEmployee, Predi
  
  /////////////////////////////////////////////////////////////////////////////
  private void displayMenu() {
-        System.out.println("----- Employee Management System -----");
-        System.out.println("1. Display all Employee");
-        System.out.println("2. Add new Employee");
-        System.out.println("3. Search Employee");
-        System.out.println("4. Delete a Employee ");
-        System.out.println("5. Update Employee");
-        System.out.println("6. Sort By Name");
-        System.out.println("7. Exit");
+        System.out.println("\t\t\t----- Employee Management System -----");
+        System.out.println("\t\t\t1. Display all Employee");
+        System.out.println("\t\t\t2. Add new Employee");
+        System.out.println("\t\t\t3. Search Employee");
+        System.out.println("\t\t\t4. Delete a Employee ");
+        System.out.println("\t\t\t5. Update Employee");
+        System.out.println("\t\t\t6. Sort By Name");
+        System.out.println("\t\t\t7. Exit");
     }
 /////////////////////////////////////////////////////////////////////////////
 public String getString(String text){
@@ -215,7 +215,7 @@ private void addNewEmployee()
         addEmployee(EmpArrList, new Employee(id, name, phone, position));
         
     
-        System.out.println("Added successfully");
+        System.out.println("\t\t\tAdded successfully");
      
     }
 
@@ -225,17 +225,17 @@ private void searchEmployee()
         int choice;
         
         ArrayList<Employee> searchArrList = new ArrayList<>();
-        System.out.println("----- Search Employee -----");
-        System.out.println("Search by:");
-        System.out.println("1. Employee ID");
-        System.out.println("2. Name");
-        System.out.println("3. Phone");
-        System.out.println("4. Position");
+        System.out.println("\t\t\t----- Search Employee -----");
+        System.out.println("\t\t\tSearch by:");
+        System.out.println("\t\t\t1. Employee ID");
+        System.out.println("\t\t\t2. Name");
+        System.out.println("\t\t\t3. Phone");
+        System.out.println("\t\t\t4. Position");
         System.out.print("Enter your choice: ");
         do {
             choice = getChoice();
             String searchKey;
-            System.out.println("");
+            System.out.println("\t\t\t");
            
             switch (choice){
                 case 1:
@@ -259,7 +259,7 @@ private void searchEmployee()
                    
                    break;
                 default:
-                    System.out.println("Invalid option! (1-4)");
+                    System.out.println("\t\t\tInvalid option! (1-4)");
                     break;
                 
            }
@@ -278,7 +278,7 @@ private void searchEmployee()
             System.out.println( "[" + deleteKey + "] deleted");
         }
         else {
-            System.out.println("No " + "[" + deleteKey + "] found!");
+            System.out.println("\t\t\tNo " + "[" + deleteKey + "] found!");
         }
     }
  
@@ -292,7 +292,7 @@ private void searchEmployee()
             id = getString("Enter ID to update: ");
             check = checkId((ArrayList<Employee>) EmpArrList, id);
             
-            if(!check) System.out.println("No ID [" + id + "] found!\n");
+            if(!check) System.out.println("\t\t\tNo ID [" + id + "] found!\n");
  
         } while (check == false);
             String newName = getString("Enter Name: ");
@@ -300,7 +300,7 @@ private void searchEmployee()
             String newPosition = getString("Enter Postion: ");
             
             update((ArrayList<Employee>) EmpArrList, id, newName, newPhone, newPosition);
-            System.out.println("Updated successfully");
+            System.out.println("\t\t\tUpdated successfully");
   
     }
  

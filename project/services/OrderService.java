@@ -1,9 +1,14 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import project.models.Order;
+import project.models.Product;
+import project.utils.DataValidator;
 
 public class OrderService {
     private List<Order> orders;
@@ -37,13 +42,16 @@ public class OrderService {
                     sortOrders();
                     break;
                 case 7:
+                    writeDataToFile();
+                    break;
+                case 0:
                     System.out.println("\t\t\tExiting...");
                     break;
                 default:
                     System.out.println("\t\t\tInvalid option! (1-7)");
                     break;
             }
-        } while (choice != 7);
+        } while (choice != 0);
     }
 
     private int getChoice() {
@@ -64,7 +72,8 @@ public class OrderService {
         System.out.println("\t\t\t| 4. Delete an Order                    |");
         System.out.println("\t\t\t| 5. Update Order Information           |");
         System.out.println("\t\t\t| 6. Sort Orders                        |");
-        System.out.println("\t\t\t| 7. Exit                               |");
+        System.out.println("\t\t\t| 7. Write Data to file                 |");
+        System.out.println("\t\t\t| 0. Exit                               |");
         System.out.println("\t\t\t+---------------------------------------+");
         System.out.println("");
     }
@@ -86,10 +95,17 @@ public class OrderService {
     private void addNewOrder() {
         Scanner sc = new Scanner(System.in);
         System.out.print("\t\t\tEnter order ID: ");
-        String orderId = sc.next();
-        sc.nextLine(); 
+        String orderId = sc.nextLine();
+        if (!DataValidator.isValidProductID(orderId)) {
+        System.out.println("\t\t\t*Invalid Product ID. Product ID must have a length of 4, start with 'SP', and contain only numbers!*");
+        return;
+        }
         System.out.print("\t\t\tEnter customer name: ");
         String customerName = sc.nextLine();
+        if (!DataValidator.isValidName(customerName)) {
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers or spaces.");
+            return;
+        }
         System.out.print("\t\t\tEnter status: ");
         String status = sc.nextLine();
         Order order = new Order(orderId, customerName, status);
@@ -145,6 +161,26 @@ public class OrderService {
         System.out.println("\t\t\t----- Orders Sorted by Status -----");
         for (Order order : sortedOrders) {
             System.out.println(order);
+        }
+    }
+
+    public void writeDataToFile() {
+        try {
+            FileWriter fw = new FileWriter("resources/data/orders.txt");
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (Order order : orders) {
+                bw.write(order.getOrderId() + ", "
+                        + order.getCustomerName() + ", "
+                        + order.getStatus());
+                bw.newLine();
+            }
+
+            bw.close();
+            System.out.println("\t\t\t**Product data saved to file successfully!.**");
+        } catch (IOException e) {
+            System.out.println("\t\t\tError writing data to file.");
+            e.printStackTrace();
         }
     }
 }
