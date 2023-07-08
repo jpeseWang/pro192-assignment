@@ -1,213 +1,125 @@
-import java.text.Collator;
+import controll.Menu;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.InputMismatchException;
-import java.util.Iterator;
-import java.util.Locale;
+import java.util.List;
 import java.util.Scanner;
-import java.util.function.Predicate;
 import project.models.Employee;
 import project.utils.DataValidator;
 
-public class EmployeeService {
-    static ArrayList<Employee> EmpArrList = new ArrayList<Employee>();
-    Scanner scanner = new Scanner(System.in);
+public class EmployeeService extends Menu {
 
-    public static ArrayList<Employee> getListEmployee() {
-        return EmpArrList;
-    }
+    private Scanner scanner = new Scanner(System.in);
+        private List<Employee> EmpArrList;
 
-    public static void displayEmployee(ArrayList<Employee> ListEmployee) {
-        if (ListEmployee.isEmpty()) {
-            System.out.println("No Employee found!");
-        } else {
-            for (Employee i : ListEmployee) {
-                System.out.println(i);
-            }
-        }
-    }
-
-    public static void addEmployee(ArrayList<Employee> ListEmployee, Employee c) {
-        ListEmployee.add(c);
-    }
-
-    public static ArrayList<Employee> search(ArrayList<Employee> ListEmployee, Predicate<Employee> p) {
-        ArrayList<Employee> searchArrList = new ArrayList<>();
-
-        for (Employee i : ListEmployee) {
-            if (p.test(i)) {
-                searchArrList.add(i);
-            }
-        }
-        return searchArrList;
-    }
-
-    public static ArrayList<Employee> searchById(ArrayList<Employee> ListEmployee, String searchKey) {
-        ListEmployee = search(ListEmployee, p -> p.getID().toLowerCase().startsWith(searchKey));
-        return ListEmployee;
-    }
-
-    public static ArrayList<Employee> searchByName(ArrayList<Employee> ListEmployee, String searchKey) {
-        ListEmployee = search(ListEmployee, p -> p.getName().toLowerCase().startsWith(searchKey));
-
-        return ListEmployee;
-    }
-
-    public static ArrayList<Employee> searchByPhone(ArrayList<Employee> ListEmployee, String searchKey) {
-        ListEmployee = search(ListEmployee, p -> p.getPhone().startsWith(searchKey));
-
-        return ListEmployee;
-    }
-
-    public static ArrayList<Employee> searchByPosition(ArrayList<Employee> ListEmployee, String searchKey) {
-        ListEmployee = search(ListEmployee, p -> p.getPosition().toLowerCase().startsWith(searchKey));
-
-        return ListEmployee;
-    }
-
-    public static boolean deleteEmployee(ArrayList<Employee> list, String deleteKey) {
-        Iterator<Employee> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Employee info = iterator.next();
-            if (info.getID().equalsIgnoreCase(deleteKey)) {
-                iterator.remove();
-                return true;
-            } else {
-                if (info.getName().equalsIgnoreCase(deleteKey)) {
-                    iterator.remove();
-                    return true;
-                } else {
-                    if (info.getPhone().equalsIgnoreCase(deleteKey)) {
-                        iterator.remove();
-                        return true;
-                    } else {
-                        if (info.getPosition().equalsIgnoreCase(deleteKey)) {
-                            iterator.remove();
-                            return true;
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    public static boolean checkId(ArrayList<Employee> list, String id) {
-        for (Employee i : list) {
-            if (i.getID().equalsIgnoreCase(id)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void update(ArrayList<Employee> List, String id, String newName, String newPhone,
-            String newPosition) {
-        for (Employee i : List) {
-            if (checkId(List, id)) {
-                i.setName(newName);
-                i.setPhone(newPhone);
-                i.setPosition(newPosition);
-                break;
-            }
-        }
-    }
-
-    public static void SortByName(ArrayList<Employee> List) {
-        Collections.sort(List, new Comparator<Employee>() {
-            @Override
-            public int compare(Employee e1, Employee e2) {
-                Collator collator = Collator.getInstance(new Locale("vi", "VN"));
-                return collator.compare(e1.getName(), e2.getName());
-            }
-        });
+    public EmployeeService() {
+        EmpArrList = new ArrayList<>();
+        readDataFromFile(); 
     }
 
     public void execute() {
         int choice;
         do {
             displayMenu();
-            choice = getChoice();
+            choice = scanner.nextInt();
+            scanner.nextLine();
+
             switch (choice) {
                 case 1:
-                    displayAllEmployee();
+                    addEmployee();
                     break;
                 case 2:
-                    addNewEmployee();
+                    displayAllEmployees();
                     break;
                 case 3:
-                    searchEmployee();
+                    writeDataToFile();
                     break;
                 case 4:
-                    deleteEmployeeByID();
+                    searchEmployee();
                     break;
                 case 5:
-                    updateInfomation();
+                    deleteEmployee();
                     break;
                 case 6:
-                    SortEmployee();
+                    updateEmployee();
                     break;
                 case 7:
-                    System.out.println("Exit");
+                    sortEmployees();
+                    break;
+                case 0:
+                    System.out.println("\t\t\tExiting...");
                     break;
                 default:
-                    System.out.println("Invalid option! (1-7)");
+                    System.out.println("\t\t\tInvalid choice. Please try again.");
                     break;
-
             }
-        } while (choice != 7);
-
-    }
-
-    private int getChoice() {
-        System.out.print("Enter your choice: ");
-        int choice = scanner.nextInt();
-        return choice;
+        } while (choice != 0);
     }
 
     private void displayMenu() {
-        System.out.println("----- Employee Management System -----");
-        System.out.println("1. Display all Employee");
-        System.out.println("2. Add new Employee");
-        System.out.println("3. Search Employee");
-        System.out.println("4. Delete a Employee ");
-        System.out.println("5. Update Employee");
-        System.out.println("6. Sort By Name");
-        System.out.println("7. Exit");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("\t\t\t|     Employee Management System        |");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("\t\t\t| 1. Add new Employee                   |");
+        System.out.println("\t\t\t| 2. Display all Employees              |");
+        System.out.println("\t\t\t| 3. Write data to file                 |");
+        System.out.println("\t\t\t| 4. Search Employee                    |");
+        System.out.println("\t\t\t| 5. Delete a Employee                  |");
+        System.out.println("\t\t\t| 6. Update phone and date of birth     |");
+        System.out.println("\t\t\t| 7. Sort Employee                      |");
+        System.out.println("\t\t\t| 0. Exit                               |");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.print("\t\t\tEnter your choice: ");
     }
 
-    public String getString(String text) {
-        System.out.print(text);
-        String input = scanner.nextLine();
-        return input;
+    // Display Employees
+    private void displayAllEmployees() {
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t|----------           All Employees           ------------|");
+        if (!EmpArrList.isEmpty()) {
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t|  ID  |      Name     |   Phone Number   | Date of Birth |");
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            for (Employee Employee : EmpArrList) {
+                System.out.printf("\t\t\t| %-4s |  %-12s |   %-14s |  %-12s |\n",
+                    Employee.getEmployeeID(), Employee.getName(), Employee.getPhone(), Employee.getDateOfBirth());
+            }
+            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+             System.out.println("");
+        } else {
+            System.out.println("\t\t\tNo Employees found.");
+        }
     }
 
-    private void displayAllEmployee() {
-        displayEmployee(EmpArrList);
-    }
-
-    private void addNewEmployee() {
-        String id, name, phone, position;
+    // Add Employees
+    private void addEmployee() {
         System.out.println("\t\t\t----- Add New Employee -----");
-        System.out.println("\t\t\t1. Employee ID must have a length of 8 and start with 'NVGH'.");
+        System.out.println("\t\t\t1. Employee ID must have a length of 4 and start with 'KH'.");
         System.out.print("\t\t\tEnter Employee ID: "); 
-        id = getString("");
-        if (!DataValidator.isValidEmployeeID(id)) {
-            System.out.println("\t\t\tInvalid ID, please try again (NVGHxxxx)");
+        String EmployeeID = scanner.nextLine();
+        if (!DataValidator.isValidEmployeeID(EmployeeID)) {
+            System.out.println("\t\t\tInvalid Employee ID. Employee ID must have a length of 4 and start with 'KH'.");
             return;
         }
-        System.out.print("\t\t\t2. Enter Employee name: "); 
-        name = getString("");
+        System.out.print("\t\t\t2. Enter Name: ");
+        String name = scanner.nextLine();
         if (!DataValidator.isValidName(name)) {
             System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
             return;
         }
-
         System.out.println("\t\t\t3. Phone must have a length of 10 and start with '09'");
         System.out.print("\t\t\tEnter Phone: "); 
+        String phone;
         try {
-            phone = getString("");
+            phone = scanner.nextLine();
             if (!DataValidator.isValidPhone(phone)) {
                 System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
                 return;
@@ -217,94 +129,299 @@ public class EmployeeService {
             
             return;
         }
-        System.out.print("\t\t\t4. Enter Employee Position: "); 
-        position = getString("");
-        if (!DataValidator.isValidName(position)) {
-            System.out.println("\t\t\tInvalid Employee Position. Position must not contain numbers.");
+        System.out.print("\t\t\tEnter Date of Birth (dd/mm/yyyy): ");
+        String dateOfBirth = scanner.nextLine();    
+        if (!DataValidator.isValidDateOfBirth(dateOfBirth)) {
+            System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
             return;
         }
-        addEmployee(EmpArrList, new Employee(id, name, phone, position));
-        System.out.println("Added successfully");
+
+        Employee Employee = new Employee(EmployeeID, name, phone, dateOfBirth);
+        EmpArrList.add(Employee);
+        System.out.println("\t\t\tEmployee added.");
     }
 
+    // Search Employees
     private void searchEmployee() {
-        int choice;
+        System.out.println("\t\t\t----- Search Employee -----");
+        System.out.println("\t\t\tSearch by:");
+        System.out.println("\t\t\t1. Employee ID");
+        System.out.println("\t\t\t2. Name");
+        System.out.println("\t\t\t3. Phone");
+        System.out.println("\t\t\t4. Date of birth");
+        System.out.print("\t\t\tEnter your choice: ");
+        int searchChoice = scanner.nextInt();
+        scanner.nextLine();
 
-        ArrayList<Employee> searchArrList = new ArrayList<>();
-        System.out.println("----- Search Employee -----");
-        System.out.println("Search by:");
-        System.out.println("1. Employee ID");
-        System.out.println("2. Name");
-        System.out.println("3. Phone");
-        System.out.println("4. Position");
-        System.out.print("Enter your choice: ");
-        do {
-            choice = getChoice();
-            String searchKey;
-            System.out.println("");
-
-            switch (choice) {
-                case 1:
-                    searchKey = getString("Enter ID to find: ").toLowerCase();
-                    searchArrList = searchById(EmpArrList, searchKey);
-
-                    break;
-                case 2:
-                    searchKey = getString("Enter Name to find: ").toLowerCase();
-                    searchArrList = searchByName(EmpArrList, searchKey);
-
-                    break;
-                case 3:
-                    searchKey = getString("Enter Phone number to find: ").toLowerCase();
-                    searchArrList = searchByPhone(EmpArrList, searchKey);
-
-                    break;
-                case 4:
-                    searchKey = getString("Enter Position to find: ").toLowerCase();
-                    searchArrList = searchByPosition(EmpArrList, searchKey);
-
-                    break;
-                default:
-                    System.out.println("Invalid option! (1-4)");
-                    break;
-
-            }
-
-            displayEmployee(searchArrList);
-
-        } while (choice < 1 && choice > 4);
-    }
-
-    public void deleteEmployeeByID(){
-        String deleteKey = getString("Enter ID to delete: ");
-        if (deleteEmployee(EmpArrList, deleteKey)) {
-            System.out.println("[" + deleteKey + "] deleted");
-        } else {
-            System.out.println("No " + "[" + deleteKey + "] found!");
+        switch (searchChoice) {
+            case 1:
+                searchEmployeeByID();
+                break;
+            case 2:
+                searchEmployeesByName();
+                break;
+            case 3:
+                searchEmployeesByPhone();
+                break;
+            case 4:
+                searchEmployeesByDateOfBirth();
+                break;
+            default:
+                System.out.println("\t\t\tInvalid choice. Please try again.");
+                break;
         }
     }
 
-    public void updateInfomation() {
-        String id;
-        boolean check;
-
-        do {
-            id = getString("Enter ID to update: ");
-            check = checkId(EmpArrList, id);
-
-            if (!check)
-                System.out.println("No ID [" + id + "] found!\n");
-
-        } while (check == false);
-        String newName = getString("Enter Name: ");
-        String newPhone = getString("Enter Phone number: ");
-        String newPosition = getString("Enter Position: ");
-        update(EmpArrList, id, newName, newPhone, newPosition);
-        System.out.println("Updated successfully");
-
+    private void searchEmployeeByID() {
+        System.out.print("\t\t\tEnter Employee ID: ");
+        String EmployeeID = scanner.nextLine();
+        if (!DataValidator.isValidEmployeeID(EmployeeID)) {
+            System.out.println("\t\t\tInvalid Employee ID. Employee ID must have a length of 4 and start with 'KH'.");
+            return;
+        }
+        Employee Employee = getEmployeeByID(EmployeeID);
+        if (Employee != null) {
+            System.out.println("\t\t\t----- Employee Found -----");
+            System.out.println(Employee);
+            System.out.println("\t\t\t--------------------------");
+        } else {
+            System.out.println("\t\t\tNo Employee found.");
+        }
     }
 
-    public void SortEmployee() {
-        SortByName(EmpArrList);
+    private Employee getEmployeeByID(String EmployeeID) {
+        for (Employee Employee : EmpArrList) {
+            if (Employee.getEmployeeID().equals(EmployeeID)) {
+                return Employee;
+            }
+        }
+        return null; 
     }
+
+    private void searchEmployeesByName() {
+        System.out.print("\t\t\tEnter Name: ");
+        String name = scanner.nextLine();
+        if (!DataValidator.isValidName(name)) {
+            System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
+            return;
+        }
+        List<Employee> Employees = getEmployeesByName(name);
+        displaySearchResults(Employees);
+    }
+
+    private List<Employee> getEmployeesByName(String name) {
+        List<Employee> Employees = new ArrayList<>();
+        for (Employee Employee : EmpArrList) {
+            if (Employee.getName().equalsIgnoreCase(name)) {
+                Employees.add(Employee);
+            }
+        }
+        return Employees;
+    }
+
+    private void searchEmployeesByPhone() {
+        System.out.print("\t\t\tEnter Phone: ");
+        String phone;
+        try {
+            phone = scanner.nextLine();
+            scanner.nextLine();
+        } catch (InputMismatchException e) {
+            System.out.println("\t\t\tInvalid Phone. Phone must be a numeric value.");
+            scanner.nextLine();
+            return;
+        }
+        if (!DataValidator.isValidPhone(phone)) {
+            System.out.println("\t\t\tInvalid Phone. Phone must be a positive value.");
+            return;
+        }
+        List<Employee> Employees = getEmployeesByPhone(phone);
+        displaySearchResults(Employees);
+    }
+
+    private List<Employee> getEmployeesByPhone(String phone) {
+        List<Employee> Employees = new ArrayList<>();
+        for (Employee Employee : EmpArrList) {
+            if (Employee.getPhone() == phone) {
+                Employees.add(Employee);
+            }
+        }
+        return Employees;
+    }
+
+    private void searchEmployeesByDateOfBirth() {
+        System.out.print("\t\t\tEnter Date of Birth (dd/mm/yyyy): ");
+        String dateOfBirth = scanner.nextLine();
+        if (!DataValidator.isValidDateOfBirth(dateOfBirth)) {
+            System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+            return;
+        }
+        List<Employee> Employees = getEmployeesByDateOfBirth(dateOfBirth);
+        displaySearchResults(Employees);
+    }
+
+    private List<Employee> getEmployeesByDateOfBirth(String dateOfBirth) {
+        List<Employee> Employees = new ArrayList<>();
+        for (Employee Employee : EmpArrList) {
+            if (Employee.getDateOfBirth() == dateOfBirth) {
+                Employees.add(Employee);
+            }
+        }
+        return Employees;
+    }
+
+    private void displaySearchResults(List<Employee> Employees) {
+        System.out.println("\t\t\t----- Search Results -----");
+        if (!Employees.isEmpty()) {
+            for (Employee Employee : Employees) {
+                System.out.println(Employee);
+                System.out.println("\t\t\t--------------------------");
+            }
+        } else {
+            System.out.println("\t\t\tNo Employees found.");
+        }
+    }
+
+    private void sortEmployees() {
+        System.out.println("\t\t\t----- Sort Employees -----");
+        System.out.println("\t\t\tSort by:");
+        System.out.println("\t\t\t1. Employee ID");
+        System.out.println("\t\t\t2. Name");
+        System.out.print("\t\t\tEnter your choice: ");
+        int sortChoice = scanner.nextInt();
+        scanner.nextLine();
+
+        switch (sortChoice) {
+            case 1:
+                sortEmployeesByID();
+                break;
+            case 2:
+                sortEmployeesByName();
+                break;
+            default:
+                System.out.println("\t\t\tInvalid choice. Please try again.");
+                break;
+        }
+    }
+
+    private void sortEmployeesByID() {
+        Collections.sort(EmpArrList, new Comparator<Employee>() {
+            @Override
+            public int compare(Employee c1, Employee c2) {
+                return c1.getEmployeeID().compareTo(c2.getEmployeeID());
+            }
+        });
+        System.out.println("\t\t\tEmployees sorted by ID:");
+        displayAllEmployees();
+    }
+
+    private void sortEmployeesByName() {
+        Collections.sort(EmpArrList, new Comparator<Employee>() {
+    @Override
+            public int compare(Employee c1, Employee c2) {
+                return c1.getName().compareToIgnoreCase(c2.getName());
+            }
+        });
+        System.out.println("\t\t\tEmployees sorted by Name:");
+        displayAllEmployees();
+    }
+
+    // Delete Employees
+    private void deleteEmployee() {
+        System.out.print("\t\t\tEnter Employee ID: ");
+            String EmployeeID = scanner.nextLine();
+            if (!DataValidator.isValidEmployeeID(EmployeeID)) {
+            System.out.println("\t\t\tInvalid Employee ID. Employee ID must have a length of 4 and start with 'KH'.");
+            return;
+        }
+        Employee Employee = getEmployeeByID(EmployeeID);
+        if (Employee != null) {
+            EmpArrList.remove(Employee);
+            System.out.println("\t\t\tEmployee deleted.");
+        } else {
+            System.out.println("\t\t\tNo Employee found.");
+        }
+    }
+
+    // Write data to file
+    public void writeDataToFile() {
+        try {
+            FileWriter fw = new FileWriter("resources/data/Employees.txt");
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (Employee Employee : EmpArrList) {
+                bw.write(Employee.getEmployeeID() + ", "
+                        + Employee.getName() + ", "
+                        + Employee.getPhone() + ", "
+                        + Employee.getDateOfBirth());
+                bw.newLine();
+            }
+
+            bw.close();
+            System.out.println("\t\t\tEmployee data saved to file.");
+        } catch (IOException e) {
+            System.out.println("\t\t\tError writing data to file.");
+            e.printStackTrace();
+        }
+    }
+
+    public void readDataFromFile() {
+        try {
+            FileInputStream fis = new FileInputStream("resources/data/Employees.txt");
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line = br.readLine();
+            while (line != null) {
+                String arr[] = line.split(",");
+                if (arr.length == 4) {
+                    Employee Employee = new Employee(arr[0], arr[1], arr[2], arr[3]);
+                    EmpArrList.add(Employee);
+                }
+                line = br.readLine();
+            }   
+            br.close();
+            isr.close();
+            fis.close();
+
+            System.out.println("\t\t\tData loaded from file successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Update information
+    private void updateEmployee() {
+        System.out.print("\t\t\tEnter Employee ID: ");
+        String EmployeeID = scanner.nextLine();
+        Employee Employee = getEmployeeByID(EmployeeID);
+        if (Employee != null) {
+            System.out.print("\t\t\tEnter new Name: ");
+                String newName = scanner.nextLine();
+                if (!DataValidator.isValidName(newName)) {
+                    System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
+                    return;
+                }
+            System.out.print("\t\t\tEnter new Phone number: ");
+                String newPhone = scanner.nextLine();
+                if (!DataValidator.isValidPhone(newPhone)) {
+                    System.out.println("\t\t\tInvalid Phone. Phone must have a length of 4 and start with '09'.");
+                    return;
+                }
+            System.out.print("\t\t\tEnter new Date of Birth (dd/mm/yyyy): ");
+                String newDateOfBirth = scanner.nextLine();
+                if (!DataValidator.isValidDateOfBirth(newDateOfBirth)) {
+                    System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+                    return;
+                }
+            
+            Employee.setPhone(newPhone);
+            Employee.setDateOfBirth(newDateOfBirth);
+            System.out.println("\t\t\tEmployee updated.");
+        } else {
+            System.out.println("\t\t\tNo Employee found.");
+        }
+    }
+    
+    //Check valid
+    
+
 }
