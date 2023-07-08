@@ -1,7 +1,9 @@
 package project.models;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
 public class Customer {
 
     private String customerID;
@@ -48,7 +50,6 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
     }
 
-    
     @Override
     public String toString() {
         return "CustomerID: " + customerID
@@ -57,5 +58,3 @@ public class Customer {
                 + ", Date of Birth: " + dateOfBirth;
     }
 }
-
-
