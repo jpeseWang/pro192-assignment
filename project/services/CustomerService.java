@@ -64,15 +64,18 @@ public class CustomerService extends Menu {
 
     // Display menu
     private void displayMenu() {
-        System.out.println("\t\t\t----- Customer Management System -----");
-        System.out.println("\t\t\t1. Add new customer");
-        System.out.println("\t\t\t2. Display all customers");
-        System.out.println("\t\t\t3. Write data to file");
-        System.out.println("\t\t\t4. Search customer");
-        System.out.println("\t\t\t5. Delete a customer");
-        System.out.println("\t\t\t6. Update phone and date of birth");
-        System.out.println("\t\t\t7. Sort customer list by different criteria");
-        System.out.println("\t\t\t0. Exit");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("\t\t\t|     Customer Management System        |");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("\t\t\t| 1. Add new customer                   |");
+        System.out.println("\t\t\t| 2. Display all customers              |");
+        System.out.println("\t\t\t| 3. Write data to file                 |");
+        System.out.println("\t\t\t| 4. Search customer                    |");
+        System.out.println("\t\t\t| 5. Delete a customer                  |");
+        System.out.println("\t\t\t| 6. Update phone and date of birth     |");
+        System.out.println("\t\t\t| 7. Sort customer                      |");
+        System.out.println("\t\t\t| 0. Exit                               |");
+        System.out.println("\t\t\t+---------------------------------------+");
         System.out.print("Enter your choice: ");
     }
 
@@ -386,22 +389,18 @@ public class CustomerService extends Menu {
                     return;
                 }
             System.out.print("Enter new Phone number: ");
-            try {
                 String newPhone = scanner.nextLine();
                 if (!isValidPhone(newPhone)) {
                     System.out.println("\t\t\tInvalid Phone. Phone must have a length of 4 and start with '09'.");
                     return;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
-                return;
-            }
             System.out.print("Enter new Date of Birth (dd/mm/yyyy): ");
                 String newDateOfBirth = scanner.nextLine();
                 if (!isValidDateOfBirth(newDateOfBirth)) {
                     System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
                     return;
-            }
+                }
+            
             customer.setPhone(newPhone);
             customer.setDateOfBirth(newDateOfBirth);
             System.out.println("\t\t\tCustomer updated.");
