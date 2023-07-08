@@ -64,6 +64,7 @@ public class ProductService extends Menu {
     }
 
     private void displayMenu() {
+        readDataFromFile();
         System.out.println("\t\t\t+---------------------------------------------------+");
         System.out.println("\t\t\t|             Product Management System             |");
         System.out.println("\t\t\t+---------------------------------------------------+");
@@ -358,7 +359,7 @@ public class ProductService extends Menu {
 
     public void writeDataToFile() {
         try {
-            FileWriter fw = new FileWriter("src/resources/data/products.txt");
+            FileWriter fw = new FileWriter("resources/data/products.txt");
             BufferedWriter bw = new BufferedWriter(fw);
 
             for (Product product : productList) {
@@ -378,7 +379,7 @@ public class ProductService extends Menu {
 
     public void readDataFromFile() {
         try {
-            FileInputStream fis = new FileInputStream("src/resources/data/products.txt");
+            FileInputStream fis = new FileInputStream("resources/data/products.txt");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             String line = br.readLine();

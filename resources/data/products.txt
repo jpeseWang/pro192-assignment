@@ -1,0 +1,5 @@
+SP01, Wooden Table, 1500000.0
+SP02, Tape, 15000.0
+SP03, Lamp, 400000.0
+SP04, Headphone, 672000.0
+SP05, Fan, 360000.0
