@@ -1,13 +1,17 @@
-package project.services;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import model.Customer;
-public class CustomerService extends Menu {
 
+import project.models.Company;
+import project.models.Customer;
+
+public class CustomerService extends Menu {
     private Company company;
     private String newPhone;
     private String newDateOfBirth;
+    Scanner scanner = new Scanner(System.in);
 
     public CustomerService() {
         company = new Company();
@@ -40,14 +44,14 @@ public class CustomerService extends Menu {
                 case 6:
                     updateCustomer();
                     break;
-                case 0:
-                    System.out.println("Exitting...");
+                case 7:
+                    System.out.println("Exiting...");
                     break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
             }
-        } while (choice != 0);
+        } while (choice != 7);
     }
 
     //Display menu
@@ -238,18 +242,18 @@ public class CustomerService extends Menu {
         return dateOfBirth.matches("^\\d{2}/\\d{2}/\\d{4}$");
     }
 
-    @Override
-    public void execute(Object data) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
+    // @Override
+    // public void execute(Object data) {
+    //     throw new UnsupportedOperationException("Not supported yet."); 
+    // }
 }
 
-public abstract class Menu <T> {
+// public abstract class Menu <T> {
 
-    protected Scanner scanner;
+//     protected Scanner scanner;
 
-    public Menu() {
-        scanner = new Scanner(System.in);
-    }
-    public abstract void execute(T data);
-}
+//     public Menu() {
+//         scanner = new Scanner(System.in);
+//     }
+//     public abstract void execute(T data);
+// }

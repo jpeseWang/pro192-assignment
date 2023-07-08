@@ -1,4 +1,9 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
+import project.models.Order;
 
 public class OrderService {
     private List<Order> orders;
@@ -6,8 +11,6 @@ public class OrderService {
     public OrderService() {
         this.orders = new ArrayList<>();
     }
-    
-  
 
     public void execute() {
         int choice;
@@ -34,10 +37,10 @@ public class OrderService {
                     sortOrders();
                     break;
                 case 7:
-                    System.out.println("Exiting...");
+                    System.out.println("\t\t\tExiting...");
                     break;
                 default:
-                    System.out.println("Invalid option! (1-7)");
+                    System.out.println("\t\t\tInvalid option! (1-7)");
                     break;
             }
         } while (choice != 7);
@@ -45,88 +48,101 @@ public class OrderService {
 
     private int getChoice() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter your choice: ");
+        System.out.print("\t\t\tEnter your choice: ");
         int choice = sc.nextInt();
         return choice;
     }
 
     private void displayMenu() {
-        System.out.println("----- Order Management System -----");
-        System.out.println("1. Display all Orders");
-        System.out.println("2. Add new Order");
-        System.out.println("3. Search Order");
-        System.out.println("4. Delete an Order");
-        System.out.println("5. Update Order Information");
-        System.out.println("6. Sort Orders");
-        System.out.println("7. Exit");
+
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("\t\t\t|     Order Management System           |");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("\t\t\t| 1. Display all Orders                 |");
+        System.out.println("\t\t\t| 2. Add new Order                      |");
+        System.out.println("\t\t\t| 3. Search Order                       |");
+        System.out.println("\t\t\t| 4. Delete an Order                    |");
+        System.out.println("\t\t\t| 5. Update Order Information           |");
+        System.out.println("\t\t\t| 6. Sort Orders                        |");
+        System.out.println("\t\t\t| 7. Exit                               |");
+        System.out.println("\t\t\t+---------------------------------------+");
+        System.out.println("");
     }
 
     private void displayAllOrders() {
-        System.out.println("----- All Orders -----");
+        System.out.println("\t\t\t+--------+------------------------+-----------+");
+        System.out.println("\t\t\t|----            All Orders              -----|");
+        System.out.println("\t\t\t+--------+------------------------+-----------+");
+        System.out.println("\t\t\t|   ID   |      Customer name     |   Status  |");
+        System.out.println("\t\t\t+--------+------------------------+-----------+");
         for (Order order : orders) {
-            System.out.println(order);
+            System.out.printf("\t\t\t| %-7s| %-23s| %-10s|\n",
+            order.getOrderId(), order.getCustomerName(), order.getStatus());
         }
+        System.out.println("\t\t\t+--------+------------------------+-----------+");
+        System.out.println("");
     }
 
     private void addNewOrder() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter order ID: ");
+        System.out.print("\t\t\tEnter order ID: ");
         String orderId = sc.next();
-        sc.nextLine(); // Consume the newline character left by next()
-        System.out.print("Enter customer name: ");
+        sc.nextLine(); 
+        System.out.print("\t\t\tEnter customer name: ");
         String customerName = sc.nextLine();
-        System.out.print("Enter status: ");
+        System.out.print("\t\t\tEnter status: ");
         String status = sc.nextLine();
         Order order = new Order(orderId, customerName, status);
         orders.add(order);
-        System.out.println("Order added successfully.");
+         System.out.println("\t\t\t|----    Status     -----|");
+        System.out.println("\t\t\t*Order added successfully!*");
     }
 
     private void searchOrder() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter order ID to find: ");
+        System.out.print("\t\t\tEnter order ID to find: ");
         String orderIdToFind = sc.next();
         for (Order order : orders) {
             if (order.getOrderId().equals(orderIdToFind)) {
-                System.out.println("Found Order: " + order);
+                System.out.println("\t\t\tFound Order: " + order);
                 return;
             }
         }
-        System.out.println("Order not found.");
+        System.out.println("\t\t\tOrder not found.");
     }
 
     private void deleteOrderByID() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter order ID to delete: ");
+        System.out.print("\t\t\tEnter order ID to delete: ");
         String orderIdToDelete = sc.next();
         orders.removeIf(order -> order.getOrderId().equals(orderIdToDelete));
-        System.out.println("Order deleted successfully.");
+        System.out.println("\t\t\tOrder deleted successfully.");
     }
 
     private void updateOrderInformation() {
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter order ID to update: ");
+        System.out.print("\t\t\tEnter order ID to update: ");
         String orderIdToUpdate = sc.next();
         for (Order order : orders) {
             if (order.getOrderId().equals(orderIdToUpdate)) {
-                sc.nextLine(); // Consume the newline character left by next()
-                System.out.print("Enter new customer name: ");
+                sc.nextLine(); 
+                System.out.print("\t\t\tEnter new customer name: ");
                 String newCustomerName = sc.nextLine();
-                System.out.print("Enter new status: ");
+                System.out.print("\t\t\tEnter new status: ");
                 String newStatus = sc.nextLine();
                 order.setCustomerName(newCustomerName);
                 order.setStatus(newStatus);
-                System.out.println("Order information updated successfully.");
+                System.out.println("\t\t\tOrder information updated successfully.");
                 return;
             }
         }
-        System.out.println("Order not found.");
+        System.out.println("\t\t\tOrder not found.");
     }
 
     private void sortOrders() {
         List<Order> sortedOrders = new ArrayList<>(orders);
         Collections.sort(sortedOrders, Comparator.comparing(Order::getStatus));
-        System.out.println("----- Orders Sorted by Status -----");
+        System.out.println("\t\t\t----- Orders Sorted by Status -----");
         for (Order order : sortedOrders) {
             System.out.println(order);
         }

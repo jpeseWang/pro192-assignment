@@ -1,5 +1,3 @@
-package project.services;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -9,8 +7,6 @@ import java.util.Comparator;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import javafx.scene.control.Menu;
-
 import project.models.Product;
 
 public class ProductService extends Menu {
@@ -23,7 +19,7 @@ public class ProductService extends Menu {
         productList = new ArrayList<>();
     }
 
-    public void execute(Product data) {
+    public void execute() {
         int choice;
         do {
             displayMenu();
@@ -62,7 +58,7 @@ public class ProductService extends Menu {
         } while (choice != 0);
     }
 
-    private void displayMenu() {
+    public void displayMenu() {
         System.out.println("----- Product Management System -----");
         System.out.println("1. Display all product list");
         System.out.println("2. Add new product");
@@ -379,4 +375,6 @@ public class ProductService extends Menu {
     private boolean isValidPrice(double price) {
         return price >= 0;
     }
+
+    
 }

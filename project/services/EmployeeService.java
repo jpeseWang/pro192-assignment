@@ -1,6 +1,13 @@
-package project.services;
+import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
+import project.models.Employee;
 
-public class EmployeeManagement {
+public class EmployeeService {
     static ArrayList<Employee> EmpArrList = new ArrayList<Employee>();
     static Validation valid = new Validation();
 
@@ -201,15 +208,10 @@ private void displayAllEmployee()
 private void addNewEmployee()
     {
         String id, name, phone, position;
-        
-        id = valid.checkValidId(getString("Enter ID: "));
-            
-        name = getString("Enter Name: ");
-        
+        id = valid.checkValidId(getString("Enter ID: "));           
+        name = getString("Enter Name: ");     
         phone = valid.checkValidPhone(getString("Enter Phone number: "));
-        
-        position = getString("Enter Position: ");
-                
+        position = getString("Enter Position: ");               
         addEmployee(EmpArrList, new Employee(id, name, phone, position));
         
     
