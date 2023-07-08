@@ -48,6 +48,9 @@ public class CustomerService extends Menu {
                 case 6:
                     updateCustomer();
                     break;
+                case 7:
+                    sortCustomers();                   
+                    break;
                 case 0:
                     System.out.println("Exiting...");
                     break;
@@ -65,8 +68,9 @@ public class CustomerService extends Menu {
         System.out.println("2. Display all customers");
         System.out.println("3. Write data to file");
         System.out.println("4. Search customer");
-        System.out.println("5. Delete a customer by ID");
+        System.out.println("5. Delete a customer");
         System.out.println("6. Update phone and date of birth");
+        System.out.println("7. Sort customer list by different criteria");
         System.out.println("0. Exit");
         System.out.print("Enter your choice: ");
     }
