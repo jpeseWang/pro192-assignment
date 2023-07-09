@@ -2,7 +2,6 @@ package project.models;
 
 
 public class Customer {
-
     private String customerID;
     private String name;
     private String phone;

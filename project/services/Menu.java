@@ -1,7 +1,13 @@
 import java.util.Scanner;
 
-public class Menu {  
+public class Menu { 
+     
     public void MenuExecute(){
+        System.out.println("\t\t\t\t     ________");
+        System.out.println("\t\t\t\t ___//__][__\\___");
+        System.out.println("\t\t\t\t|                |\\");
+        System.out.println("\t\t\t\t`-O------------O-'`");
+        
     Scanner scanner = new Scanner(System.in);
     int choice;
         do {

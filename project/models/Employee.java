@@ -5,13 +5,13 @@ public class Employee {
     private String ID;
     private String Name;
     private String Phone;
-    private String Position;
+    private String dateOfBirth;
 
-    public Employee(String ID, String Name, String Phone, String Position) {
+    public Employee(String ID, String Name, String Phone, String dateOfBirth) {
         this.ID = ID;
         this.Name = Name;
         this.Phone = Phone;
-        this.Position = Position;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getID() {
@@ -37,18 +37,17 @@ public class Employee {
     public void setPhone(String Phone) {
         this.Phone = Phone;
     }
-
-    public String getPosition() {
-        return Position;
+    public String getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setPosition(String Position) {
-        this.Position = Position;
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override
     public String toString() {
-        return "Employee{" + "ID=" + ID + ", Name=" + Name + ", Phone=" + Phone + ", Position=" + Position + '}';
+        return "Employee{" + "ID=" + ID + ", Name=" + Name + ", Phone=" + Phone + ", DateOfBirth=" + dateOfBirth + '}';
     }
 
 }

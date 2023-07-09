@@ -1,4 +1,4 @@
-import controll.Menu;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -82,17 +82,17 @@ public class EmployeeService extends Menu {
 
     // Display Employees
     private void displayAllEmployees() {
-            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
-            System.out.println("\t\t\t|----------           All Employees           ------------|");
+            System.out.println("\t\t\t+-----------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t|------------         All Employees                ------------|");
         if (!EmpArrList.isEmpty()) {
-            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
-            System.out.println("\t\t\t|  ID  |      Name     |   Phone Number   | Date of Birth |");
-            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t+-----------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t|     ID    |      Name     |   Phone Number   | Date of Birth |");
+            System.out.println("\t\t\t+-----------+---------------+------------------+---------------+");
             for (Employee Employee : EmpArrList) {
-                System.out.printf("\t\t\t| %-4s |  %-12s |   %-14s |  %-12s |\n",
-                    Employee.getEmployeeID(), Employee.getName(), Employee.getPhone(), Employee.getDateOfBirth());
+                System.out.printf("\t\t\t| %-5s  |  %-12s |   %-14s |  %-12s |\n",
+                    Employee.getID(), Employee.getName(), Employee.getPhone(), Employee.getDateOfBirth());
             }
-            System.out.println("\t\t\t+------+---------------+------------------+---------------+");
+            System.out.println("\t\t\t+-----------+---------------+------------------+---------------+");
              System.out.println("");
         } else {
             System.out.println("\t\t\tNo Employees found.");
@@ -191,7 +191,7 @@ public class EmployeeService extends Menu {
 
     private Employee getEmployeeByID(String EmployeeID) {
         for (Employee Employee : EmpArrList) {
-            if (Employee.getEmployeeID().equals(EmployeeID)) {
+            if (Employee.getID().equals(EmployeeID)) {
                 return Employee;
             }
         }
@@ -307,7 +307,7 @@ public class EmployeeService extends Menu {
         Collections.sort(EmpArrList, new Comparator<Employee>() {
             @Override
             public int compare(Employee c1, Employee c2) {
-                return c1.getEmployeeID().compareTo(c2.getEmployeeID());
+                return c1.getID().compareTo(c2.getID());
             }
         });
         System.out.println("\t\t\tEmployees sorted by ID:");
@@ -345,11 +345,11 @@ public class EmployeeService extends Menu {
     // Write data to file
     public void writeDataToFile() {
         try {
-            FileWriter fw = new FileWriter("resources/data/Employees.txt");
+            FileWriter fw = new FileWriter("resources/data/employees.txt");
             BufferedWriter bw = new BufferedWriter(fw);
 
             for (Employee Employee : EmpArrList) {
-                bw.write(Employee.getEmployeeID() + ", "
+                bw.write(Employee.getID() + ", "
                         + Employee.getName() + ", "
                         + Employee.getPhone() + ", "
                         + Employee.getDateOfBirth());
@@ -366,7 +366,7 @@ public class EmployeeService extends Menu {
 
     public void readDataFromFile() {
         try {
-            FileInputStream fis = new FileInputStream("resources/data/Employees.txt");
+            FileInputStream fis = new FileInputStream("resources/data/employees.txt");
             InputStreamReader isr = new InputStreamReader(fis);
             BufferedReader br = new BufferedReader(isr);
             String line = br.readLine();
