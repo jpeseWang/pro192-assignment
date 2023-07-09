@@ -34,6 +34,7 @@ public class Menu {
                     break;
                 case 2:
                     ProductService productService = new ProductService();
+                    productService.readDataFromFile();
                     productService.execute();
                     break;
                 case 3:
