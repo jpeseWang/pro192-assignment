@@ -83,7 +83,7 @@ public class CustomerService extends Menu {
     // Display customers
     private void displayAllCustomers() {
             System.out.println("\t\t\t+------+---------------+------------------+---------------+");
-            System.out.println("\t\t\t|----------           All Customers           ------------|");
+            System.out.println("\t\t\t|----------                All Customers      ------------|");
         if (!customerList.isEmpty()) {
             System.out.println("\t\t\t+------+---------------+------------------+---------------+");
             System.out.println("\t\t\t|  ID  |   Name        |   Phone Number   | Date of Birth |");
