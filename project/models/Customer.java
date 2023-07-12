@@ -1,20 +1,18 @@
 package project.models;
 
+import java.time.LocalDate;
 
 public class Customer {
     private String customerID;
     private String name;
     private String phone;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
 
-    public Customer(String customerID, String name, String phone, String dateOfBirth) {
+    public Customer(String customerID, String name, String phone, LocalDate dateOfBirth) {
         this.customerID = customerID;
         this.name = name;
         this.phone = phone;
         this.dateOfBirth = dateOfBirth;
-    }
-
-    public Customer(String string, String string2, double parseDouble) {
     }
 
     public String getCustomerID() {
@@ -41,11 +39,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public String getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
