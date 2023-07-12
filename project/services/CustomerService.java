@@ -24,7 +24,7 @@ public class CustomerService extends Menu {
 
     public CustomerService() {
         customerList = new ArrayList<>();
-        readDataFromFile(); 
+        readDataFromFile();
     }
 
     public void execute() {
@@ -92,7 +92,8 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\t+------+---------------+------------------+---------------+");
             for (Customer customer : customerList) {
                 System.out.printf("\t\t\t| %-4s |   %-12s|   %-14s |  %s   |\n",
-                customer.getCustomerID(), customer.getName(), customer.getPhone(), customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+                        customer.getCustomerID(), customer.getName(), customer.getPhone(),
+                        customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
             }
             System.out.println("\t\t\t+------+---------------+------------------+---------------+");
@@ -112,7 +113,8 @@ public class CustomerService extends Menu {
             System.out.print("\t\t\tEnter Customer ID: ");
             customerID = scanner.nextLine();
             if (!DataValidator.isValidCustomerID(customerID)) {
-                System.out.println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
+                System.out
+                        .println("\t\t\tInvalid Customer ID. Customer ID must have a length of 4 and start with 'KH'.");
             }
         } while (!DataValidator.isValidCustomerID(customerID));
 
@@ -152,7 +154,6 @@ public class CustomerService extends Menu {
         customerList.add(customer);
         System.out.println("\t\t\tCustomer added.");
     }
-
 
     // Search customers
     private void searchCustomer() {
@@ -195,7 +196,8 @@ public class CustomerService extends Menu {
         Customer customer = getCustomerByID(customerID);
         if (customer != null) {
             System.out.println("\t\t\t----- Customer Found -----");
-            System.out.println(customer.getCustomerID() + " | " + customer.getName() + " | " + customer.getPhone() + " | " + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            System.out.println(customer.getCustomerID() + " | " + customer.getName() + " | " + customer.getPhone()
+                    + " | " + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             System.out.println("\t\t\t--------------------------");
         } else {
             System.out.println("\t\t\tNo customer found.");
@@ -208,7 +210,7 @@ public class CustomerService extends Menu {
                 return customer;
             }
         }
-        return null; 
+        return null;
     }
 
     private void searchCustomersByName() {
@@ -378,7 +380,6 @@ public class CustomerService extends Menu {
         }
     }
 
-
     public void readDataFromFile() {
         try {
             FileInputStream fis = new FileInputStream("pro192-assignment/resources/data/customers.txt");
@@ -398,7 +399,7 @@ public class CustomerService extends Menu {
                     customerList.add(customer);
                 }
                 line = br.readLine();
-            }   
+            }
             br.close();
             isr.close();
             fis.close();
@@ -444,4 +445,3 @@ public class CustomerService extends Menu {
         }
     }
 }
-
