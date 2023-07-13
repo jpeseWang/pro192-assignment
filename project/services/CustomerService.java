@@ -16,6 +16,7 @@ import java.util.Scanner;
 import project.models.Customer;
 import project.models.Product;
 import project.utils.DataValidator;
+import java.util.function.Predicate;
 
 public class CustomerService extends Menu {
 
@@ -74,8 +75,8 @@ public class CustomerService extends Menu {
         System.out.println("\t\t\t| 2. Display all customers              |");
         System.out.println("\t\t\t| 3. Write data to file                 |");
         System.out.println("\t\t\t| 4. Search customer                    |");
-        System.out.println("\t\t\t| 5. Delete a customer                  |");
-        System.out.println("\t\t\t| 6. Update phone and date of birth     |");
+        System.out.println("\t\t\t| 5. Delete  customer                   |");
+        System.out.println("\t\t\t| 6. Update information                 |");
         System.out.println("\t\t\t| 7. Sort customer                      |");
         System.out.println("\t\t\t| 0. Exit                               |");
         System.out.println("\t\t\t+---------------------------------------+");
@@ -220,9 +221,11 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
             return;
         }
-        List<Customer> customers = getCustomersByName(name);
+        Predicate<Customer> namePredicate = customer -> customer.getName().equalsIgnoreCase(name);
+        List<Customer> customers = filterCustomers(namePredicate);
         displaySearchResults(customers);
     }
+    
 
     private List<Customer> getCustomersByName(String name) {
         List<Customer> customers = new ArrayList<>();
@@ -236,21 +239,16 @@ public class CustomerService extends Menu {
 
     private void searchCustomersByPhone() {
         System.out.print("\t\t\tEnter Phone: ");
-        String phone;
-        try {
-            phone = scanner.nextLine();
-        } catch (InputMismatchException e) {
-            System.out.println("\t\t\tInvalid Phone. Phone must be a numeric value.");
-            scanner.nextLine();
-            return;
-        }
+        String phone = scanner.nextLine();
         if (!DataValidator.isValidPhone(phone)) {
-            System.out.println("\t\t\tInvalid Phone. Phone must be a positive value.");
+            System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
             return;
         }
-        List<Customer> customers = getCustomersByPhone(phone);
+        Predicate<Customer> phonePredicate = customer -> customer.getPhone().equals(phone);
+        List<Customer> customers = filterCustomers(phonePredicate);
         displaySearchResults(customers);
     }
+    
 
     private List<Customer> getCustomersByPhone(String phone) {
         List<Customer> customers = new ArrayList<>();
@@ -271,9 +269,11 @@ public class CustomerService extends Menu {
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
-        List<Customer> customers = getCustomersByDateOfBirth(dateOfBirth);
+        Predicate<Customer> dateOfBirthPredicate = customer -> customer.getDateOfBirth().equals(dateOfBirth);
+        List<Customer> customers = filterCustomers(dateOfBirthPredicate);
         displaySearchResults(customers);
     }
+    
 
     private List<Customer> getCustomersByDateOfBirth(LocalDate dateOfBirth) {
         List<Customer> customers = new ArrayList<>();
@@ -296,6 +296,16 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\tNo customers found.");
         }
     }
+    private List<Customer> filterCustomers(Predicate<Customer> predicate) {
+        List<Customer> filteredCustomers = new ArrayList<>();
+        for (Customer customer : customerList) {
+            if (predicate.test(customer)) {
+                filteredCustomers.add(customer);
+            }
+        }
+        return filteredCustomers;
+    }
+    
 
     private void sortCustomers() {
         System.out.println("\t\t\t----- Sort Customers -----");
