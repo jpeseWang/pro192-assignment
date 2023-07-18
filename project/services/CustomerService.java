@@ -266,21 +266,6 @@ public class CustomerService extends Menu {
         return null;
     }
 
-    private void displaySearchResults(List<Customer> customers) {
-        System.out.println("\t\t\t----- Search Results -----");
-        if (!customers.isEmpty()) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Change the date format
-            for (Customer customer : customers) {
-                String formattedDateOfBirth = customer.getDateOfBirth().format(formatter); // Format the date of birth
-
-                System.out.println(customer);
-                System.out.println("\t\t\t--------------------------");
-            }
-        } else {
-            System.out.println("\t\t\tNo customers found.");
-        }
-    }
-
     private void sortCustomers() {
         System.out.println("\t\t\t----- Sort Customers -----");
         System.out.println("\t\t\tSort by:");
