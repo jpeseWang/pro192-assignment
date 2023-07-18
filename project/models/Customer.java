@@ -1,6 +1,7 @@
 package project.models;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Customer {
     private String customerID;
@@ -49,6 +50,8 @@ public class Customer {
 
     @Override
     public String toString() {
+         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Change the date format
+        String formattedDateOfBirth = dateOfBirth.format(formatter); // Format the date of birth
         return "CustomerID: " + customerID
                 + ", Name: " + name
                 + ", Phone: " + phone

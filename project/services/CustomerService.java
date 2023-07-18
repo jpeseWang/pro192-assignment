@@ -140,12 +140,12 @@ public class CustomerService extends Menu {
 
         LocalDate dateOfBirth;
         do {
-            System.out.print("\t\t\tEnter Date of Birth (dd/mm/yyyy): ");
+            System.out.print("\t\t\tEnter Date of Birth (dd-MM-yyyy): ");
             String dateOfBirthString = scanner.nextLine();
             if (!DataValidator.isValidDateOfBirth(dateOfBirthString)) {
-                System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+                System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd-MM-yyyy'.");
             } else {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                 dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
                 break;
             }
@@ -218,77 +218,97 @@ public class CustomerService extends Menu {
         System.out.print("\t\t\tEnter Name: ");
         String name = scanner.nextLine();
         if (!DataValidator.isValidName(name)) {
-            System.out.println("\t\t\tInvalid Name. Name must not contain numbers.");
+            System.out.println("\t\t\tInvalid name.");
             return;
         }
-        Predicate<Customer> namePredicate = customer -> customer.getName().equalsIgnoreCase(name);
-        List<Customer> customers = filterCustomers(namePredicate);
-        displaySearchResults(customers);
+        Customer customer = getCustomersByName(name);
+        if (customer != null) {
+            System.out.println("\t\t\t----- Customer Found -----");
+            System.out.println(customer.getCustomerID() + " | " + customer.getName() + " | " + customer.getPhone()
+                    + " | " + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            System.out.println("\t\t\t--------------------------");
+        } else {
+            System.out.println("\t\t\tNo customer found.");
+        }
     }
     
 
-    private List<Customer> getCustomersByName(String name) {
-        List<Customer> customers = new ArrayList<>();
+    private Customer getCustomersByName(String name) {
         for (Customer customer : customerList) {
             if (customer.getName().equalsIgnoreCase(name)) {
-                customers.add(customer);
+                return customer;
             }
         }
-        return customers;
-    }
-
-    private void searchCustomersByPhone() {
-        System.out.print("\t\t\tEnter Phone: ");
-        String phone = scanner.nextLine();
-        if (!DataValidator.isValidPhone(phone)) {
-            System.out.println("\t\t\tInvalid Phone. Phone must be a valid number.");
-            return;
-        }
-        Predicate<Customer> phonePredicate = customer -> customer.getPhone().equals(phone);
-        List<Customer> customers = filterCustomers(phonePredicate);
-        displaySearchResults(customers);
+        return null;
     }
     
 
-    private List<Customer> getCustomersByPhone(String phone) {
-        List<Customer> customers = new ArrayList<>();
+    private void searchCustomersByPhone() {
+        System.out.print("\t\t\tEnter phone: ");
+        String phone = scanner.nextLine();
+        if (!DataValidator.isValidPhone(phone)) {
+            System.out.println("\t\t\tInvalid phone number. Phone number must have a length of 10 and start with '09'.");
+            return;
+        }
+        Customer customer = getCustomersByPhone(phone);
+        if (customer != null) {
+            System.out.println("\t\t\t----- Customer Found -----");
+            System.out.println(customer.getCustomerID() + " | " + customer.getName() + " | " + customer.getPhone()
+                    + " | " + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            System.out.println("\t\t\t--------------------------");
+        } else {
+            System.out.println("\t\t\tNo customer found.");
+        }
+    }
+    
+
+    private Customer getCustomersByPhone(String phone) {
         for (Customer customer : customerList) {
             if (customer.getPhone().equals(phone)) {
-                customers.add(customer);
+                return customer;
             }
         }
-        return customers;
+        return null;
     }
 
     private void searchCustomersByDateOfBirth() {
-        System.out.print("\t\t\tEnter Date of Birth (dd/mm/yyyy): ");
+        System.out.print("\t\t\tEnter Date of birth: ");
         String dateOfBirthString = scanner.nextLine();
         if (!DataValidator.isValidDateOfBirth(dateOfBirthString)) {
-            System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+            System.out.println("\t\t\tInvalid date of birth. Date of birth must have a format dd-MM-yyyy.");
             return;
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
-        Predicate<Customer> dateOfBirthPredicate = customer -> customer.getDateOfBirth().equals(dateOfBirth);
-        List<Customer> customers = filterCustomers(dateOfBirthPredicate);
-        displaySearchResults(customers);
+        Customer customer = getCustomersByDateOfBirth(dateOfBirth);
+        if (customer != null) {
+            System.out.println("\t\t\t----- Customer Found -----");
+            System.out.println(customer.getCustomerID() + " | " + customer.getName() + " | " + customer.getPhone()
+                    + " | " + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+            System.out.println("\t\t\t--------------------------");
+        } else {
+            System.out.println("\t\t\tNo customer found.");
+        }
     }
     
 
-    private List<Customer> getCustomersByDateOfBirth(LocalDate dateOfBirth) {
-        List<Customer> customers = new ArrayList<>();
+    private Customer getCustomersByDateOfBirth(LocalDate dateOfBirth) {
         for (Customer customer : customerList) {
             if (customer.getDateOfBirth().equals(dateOfBirth)) {
-                customers.add(customer);
+                return customer;
             }
         }
-        return customers;
+        return null;
     }
+    
 
     private void displaySearchResults(List<Customer> customers) {
         System.out.println("\t\t\t----- Search Results -----");
         if (!customers.isEmpty()) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Change the date format
             for (Customer customer : customers) {
+                String formattedDateOfBirth = customer.getDateOfBirth().format(formatter); // Format the date of birth
+
                 System.out.println(customer);
                 System.out.println("\t\t\t--------------------------");
             }
@@ -296,16 +316,7 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\tNo customers found.");
         }
     }
-    private List<Customer> filterCustomers(Predicate<Customer> predicate) {
-        List<Customer> filteredCustomers = new ArrayList<>();
-        for (Customer customer : customerList) {
-            if (predicate.test(customer)) {
-                filteredCustomers.add(customer);
-            }
-        }
-        return filteredCustomers;
-    }
-    
+   
 
     private void sortCustomers() {
         System.out.println("\t\t\t----- Sort Customers -----");
@@ -403,7 +414,7 @@ public class CustomerService extends Menu {
                     String name = arr[1];
                     String phone = arr[2];
                     String dateOfBirthString = arr[3];
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
                     LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
                     Customer customer = new Customer(customerID, name, phone, dateOfBirth);
                     customerList.add(customer);
@@ -438,13 +449,13 @@ public class CustomerService extends Menu {
                 System.out.println("\t\t\tInvalid Phone. Phone must have a length of 4 and start with '09'.");
                 return;
             }
-            System.out.print("\t\t\tEnter new Date of Birth (dd/mm/yyyy): ");
+            System.out.print("\t\t\tEnter new Date of Birth (dd-mm-yyyy): ");
             String newDateOfBirthString = scanner.nextLine();
             if (!DataValidator.isValidDateOfBirth(newDateOfBirthString)) {
-                System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd/MM/yyyy'.");
+                System.out.println("\t\t\tInvalid Date of Birth. Date of Birth must be in the format 'dd-MM-yyyy'.");
                 return;
             }
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
             LocalDate newDateOfBirth = LocalDate.parse(newDateOfBirthString, formatter);
 
             customer.setPhone(newPhone);
