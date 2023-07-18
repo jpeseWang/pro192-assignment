@@ -163,7 +163,6 @@ public class CustomerService extends Menu {
         System.out.println("\t\t\t1. Customer ID");
         System.out.println("\t\t\t2. Name");
         System.out.println("\t\t\t3. Phone");
-        System.out.println("\t\t\t4. Date of birth");
         System.out.print("\t\t\tEnter your choice: ");
         int searchChoice = scanner.nextInt();
         scanner.nextLine();
@@ -178,9 +177,7 @@ public class CustomerService extends Menu {
             case 3:
                 searchCustomersByPhone();
                 break;
-            case 4:
-                searchCustomersByDateOfBirth();
-                break;
+
             default:
                 System.out.println("\t\t\tInvalid choice. Please try again.");
                 break;
@@ -231,7 +228,6 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\tNo customer found.");
         }
     }
-    
 
     private Customer getCustomersByName(String name) {
         for (Customer customer : customerList) {
@@ -241,13 +237,13 @@ public class CustomerService extends Menu {
         }
         return null;
     }
-    
 
     private void searchCustomersByPhone() {
         System.out.print("\t\t\tEnter phone: ");
         String phone = scanner.nextLine();
         if (!DataValidator.isValidPhone(phone)) {
-            System.out.println("\t\t\tInvalid phone number. Phone number must have a length of 10 and start with '09'.");
+            System.out
+                    .println("\t\t\tInvalid phone number. Phone number must have a length of 10 and start with '09'.");
             return;
         }
         Customer customer = getCustomersByPhone(phone);
@@ -260,7 +256,6 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\tNo customer found.");
         }
     }
-    
 
     private Customer getCustomersByPhone(String phone) {
         for (Customer customer : customerList) {
@@ -270,37 +265,6 @@ public class CustomerService extends Menu {
         }
         return null;
     }
-
-    private void searchCustomersByDateOfBirth() {
-        System.out.print("\t\t\tEnter Date of birth: ");
-        String dateOfBirthString = scanner.nextLine();
-        if (!DataValidator.isValidDateOfBirth(dateOfBirthString)) {
-            System.out.println("\t\t\tInvalid date of birth. Date of birth must have a format dd-MM-yyyy.");
-            return;
-        }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate dateOfBirth = LocalDate.parse(dateOfBirthString, formatter);
-        Customer customer = getCustomersByDateOfBirth(dateOfBirth);
-        if (customer != null) {
-            System.out.println("\t\t\t----- Customer Found -----");
-            System.out.println(customer.getCustomerID() + " | " + customer.getName() + " | " + customer.getPhone()
-                    + " | " + customer.getDateOfBirth().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
-            System.out.println("\t\t\t--------------------------");
-        } else {
-            System.out.println("\t\t\tNo customer found.");
-        }
-    }
-    
-
-    private Customer getCustomersByDateOfBirth(LocalDate dateOfBirth) {
-        for (Customer customer : customerList) {
-            if (customer.getDateOfBirth().equals(dateOfBirth)) {
-                return customer;
-            }
-        }
-        return null;
-    }
-    
 
     private void displaySearchResults(List<Customer> customers) {
         System.out.println("\t\t\t----- Search Results -----");
@@ -316,7 +280,6 @@ public class CustomerService extends Menu {
             System.out.println("\t\t\tNo customers found.");
         }
     }
-   
 
     private void sortCustomers() {
         System.out.println("\t\t\t----- Sort Customers -----");

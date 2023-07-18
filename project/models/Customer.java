@@ -50,8 +50,6 @@ public class Customer {
 
     @Override
     public String toString() {
-         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy"); // Change the date format
-        String formattedDateOfBirth = dateOfBirth.format(formatter); // Format the date of birth
         return "CustomerID: " + customerID
                 + ", Name: " + name
                 + ", Phone: " + phone
